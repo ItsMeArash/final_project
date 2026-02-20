@@ -1,6 +1,6 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
+import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   createUserSchema,
@@ -65,7 +65,7 @@ export function UserForm(props: CreateUserFormProps | EditUserFormProps) {
     handleSubmit,
     formState: { errors },
   } = useForm<CreateUserFormData | UpdateUserFormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as Resolver<CreateUserFormData | UpdateUserFormData>,
     defaultValues,
   })
 

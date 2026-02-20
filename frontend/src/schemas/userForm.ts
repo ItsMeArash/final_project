@@ -28,7 +28,7 @@ export function createUserSchema(t: TranslateFn) {
     username: createUsernameSchema(t),
     password: createPasswordSchema(t),
     role_id: z.string().min(1, t('validation.roleRequired')),
-    is_active: z.boolean().default(true),
+    is_active: z.boolean(),
   })
 }
 
@@ -52,7 +52,7 @@ export function getUpdateUserSchema(t: TranslateFn) {
         t('validation.passwordOptional')
       ),
     role_id: z.string().min(1, t('validation.roleRequired')),
-    is_active: z.boolean().default(true),
+    is_active: z.boolean(),
   })
 }
 
