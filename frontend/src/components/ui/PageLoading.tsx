@@ -11,7 +11,7 @@ interface PageLoadingProps {
  */
 export default function PageLoading({ message = 'Loading...' }: PageLoadingProps) {
   return (
-    <div className="relative flex-1 bg-white">
+    <div className="relative flex-1 bg-white dark:bg-gray-900">
       <div
         className="absolute inset-x-0 top-0 h-1 animate-pulse bg-primary-600/30"
         aria-hidden
