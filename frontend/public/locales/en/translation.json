@@ -1,0 +1,98 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "accessDenied": "Access Denied",
+    "cancel": "Cancel",
+    "na": "N/A",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "layout": {
+    "adminDashboard": "Admin Dashboard",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "analytics": "Analytics",
+    "chat": "Chat"
+  },
+  "auth": {
+    "loginTitle": "Admin Dashboard Login",
+    "username": "Username",
+    "password": "Password",
+    "invalidCredentials": "Invalid credentials. Please try again.",
+    "loggingIn": "Logging in...",
+    "login": "Login",
+    "enterAnswer": "Enter answer",
+    "invalidCaptcha": "Invalid captcha. Please try again.",
+    "verifying": "Verifying...",
+    "verifyCaptcha": "Verify Captcha"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcomeBack": "Welcome Back!",
+    "sidebarHint": "Use the sidebar to navigate to different sections of the admin dashboard.",
+    "quickActions": "Quick Actions",
+    "manageUsers": "Manage Users",
+    "viewAnalytics": "View Analytics",
+    "chatWithTeam": "Chat with Team",
+    "systemStatus": "System Status",
+    "allSystemsOperational": "All systems operational"
+  },
+  "users": {
+    "title": "Users",
+    "createUser": "Create User",
+    "editUser": "Edit User",
+    "name": "Name",
+    "username": "Username",
+    "role": "Role",
+    "status": "Status",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to deactivate this user?",
+    "loadingUsers": "Loading users...",
+    "loadingUser": "Loading user...",
+    "fullName": "Full Name",
+    "selectRole": "Select a role",
+    "passwordLeaveBlank": "Password (leave blank to keep current)",
+    "errorCreating": "Error creating user. Please check all fields and try again.",
+    "errorUpdating": "Error updating user. Please check all fields and try again.",
+    "creating": "Creating...",
+    "updating": "Updating...",
+    "updateUser": "Update User"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "category": "Category",
+    "filterByCategory": "Filter by category",
+    "loadingAnalytics": "Loading analytics...",
+    "totalUsers": "Total Users",
+    "activeUsers": "Active Users",
+    "revenue": "Revenue",
+    "growthRate": "Growth Rate",
+    "avgSession": "Avg Session",
+    "dailyActiveUsers": "Daily Active Users",
+    "users": "Users",
+    "monthlyRevenue": "Monthly Revenue",
+    "categoryDistribution": "Category Distribution",
+    "share": "Share",
+    "productPerformance": "Product Performance",
+    "value": "Value"
+  },
+  "chat": {
+    "onlineUsers": "Online Users",
+    "typeMessage": "Type a message...",
+    "send": "Send",
+    "selectUserToChat": "Select a user to start chatting"
+  },
+  "loading": {
+    "default": "Loading...",
+    "dashboard": "Loading dashboard...",
+    "users": "Loading users...",
+    "user": "Loading user...",
+    "analytics": "Loading analytics...",
+    "chat": "Loading chat..."
+  }
+}
