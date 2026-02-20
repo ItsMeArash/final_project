@@ -2,7 +2,7 @@
 
 import { useAuthStore } from '@/stores/authStore'
 import { usePathname } from 'next/navigation'
-import { LocaleLink } from '@/components/LocaleLink'
+import { TransitionLocaleLink } from '@/components/TransitionLocaleLink'
 import { useDictionary } from '@/contexts/DictionaryContext'
 import {
   LayoutDashboard,
@@ -49,7 +49,7 @@ export function Sidebar({ isExpanded }: SidebarProps) {
               pathWithoutLocale.startsWith(`${item.href}/`)
             const Icon = item.Icon
             return (
-              <LocaleLink
+              <TransitionLocaleLink
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
@@ -62,7 +62,7 @@ export function Sidebar({ isExpanded }: SidebarProps) {
                 {isExpanded && (
                   <span className="truncate">{t(item.labelKey)}</span>
                 )}
-              </LocaleLink>
+              </TransitionLocaleLink>
             )
           })}
         </div>
