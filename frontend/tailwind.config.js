@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        persian: ['Yekan Bakh FaNum', 'sans-serif'],
+      },
       colors: {
         primary: {
           50: '#f0f9ff',

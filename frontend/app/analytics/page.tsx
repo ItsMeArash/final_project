@@ -15,8 +15,27 @@ const HighchartsReact = dynamic(() => import('highcharts-react-official'), {
 })
 import Highcharts from 'highcharts'
 
+const PERSIAN_FONT = "'Yekan Bakh FaNum', sans-serif"
+
+function getChartFontOptions(lang: string): Highcharts.Options {
+  if (lang !== 'fa') return {}
+  return {
+    chart: { style: { fontFamily: PERSIAN_FONT } },
+    title: { style: { fontFamily: PERSIAN_FONT } },
+    subtitle: { style: { fontFamily: PERSIAN_FONT } },
+    xAxis: { labels: { style: { fontFamily: PERSIAN_FONT } } },
+    yAxis: {
+      title: { style: { fontFamily: PERSIAN_FONT } },
+      labels: { style: { fontFamily: PERSIAN_FONT } },
+    },
+    legend: { itemStyle: { fontFamily: PERSIAN_FONT } },
+    tooltip: { style: { fontFamily: PERSIAN_FONT } },
+  }
+}
+
 export default function AnalyticsPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const fontOptions = getChartFontOptions(i18n.language)
   const [startDate, setStartDate] = useState(
     format(subDays(new Date(), 30), 'yyyy-MM-dd')
   )
@@ -29,9 +48,10 @@ export default function AnalyticsPage() {
   })
 
   const lineChartOptions: Highcharts.Options = {
-    title: { text: t('analytics.dailyActiveUsers') },
-    xAxis: { categories: data?.line_chart.labels || [] },
-    yAxis: { title: { text: t('analytics.users') } },
+    ...fontOptions,
+    title: { ...fontOptions.title, text: t('analytics.dailyActiveUsers') },
+    xAxis: { ...fontOptions.xAxis, categories: data?.line_chart.labels || [] },
+    yAxis: { ...fontOptions.yAxis, title: { ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title, text: t('analytics.users') } },
     series: data?.line_chart.datasets.map((dataset) => ({
       type: 'line',
       name: dataset.label,
@@ -40,9 +60,10 @@ export default function AnalyticsPage() {
   }
 
   const barChartOptions: Highcharts.Options = {
-    title: { text: t('analytics.monthlyRevenue') },
-    xAxis: { categories: data?.bar_chart.labels || [] },
-    yAxis: { title: { text: t('analytics.revenue') } },
+    ...fontOptions,
+    title: { ...fontOptions.title, text: t('analytics.monthlyRevenue') },
+    xAxis: { ...fontOptions.xAxis, categories: data?.bar_chart.labels || [] },
+    yAxis: { ...fontOptions.yAxis, title: { ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title, text: t('analytics.revenue') } },
     series: data?.bar_chart.datasets.map((dataset) => ({
       type: 'column',
       name: dataset.label,
@@ -51,8 +72,9 @@ export default function AnalyticsPage() {
   }
 
   const pieChartOptions: Highcharts.Options = {
-    title: { text: t('analytics.categoryDistribution') },
-    chart: { type: 'pie' },
+    ...fontOptions,
+    title: { ...fontOptions.title, text: t('analytics.categoryDistribution') },
+    chart: { ...fontOptions.chart, type: 'pie' },
     series: [
       {
         type: 'pie',
@@ -66,9 +88,10 @@ export default function AnalyticsPage() {
   }
 
   const areaChartOptions: Highcharts.Options = {
-    title: { text: t('analytics.productPerformance') },
-    xAxis: { categories: data?.area_chart.labels || [] },
-    yAxis: { title: { text: t('analytics.value') } },
+    ...fontOptions,
+    title: { ...fontOptions.title, text: t('analytics.productPerformance') },
+    xAxis: { ...fontOptions.xAxis, categories: data?.area_chart.labels || [] },
+    yAxis: { ...fontOptions.yAxis, title: { ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title, text: t('analytics.value') } },
     series: data?.area_chart.datasets.map((dataset) => ({
       type: 'area',
       name: dataset.label,

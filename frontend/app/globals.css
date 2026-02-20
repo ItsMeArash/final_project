@@ -1,3 +1,5 @@
+@import url('/fonts/fontiran.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,6 +21,12 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-start-rgb));
+}
+
+/* Persian font (Yekan Bakh FaNum) when language is fa */
+html[lang='fa'] body,
+html[lang^='fa-'] body {
+  font-family: 'Yekan Bakh FaNum', sans-serif;
 }
 
 @layer base {
