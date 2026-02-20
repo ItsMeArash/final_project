@@ -81,7 +81,16 @@ export default function UsersPage() {
                     {user.username}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.role?.name || t('common.na')}
+                    {user.role && hasPermission('ROLE_MANAGE') ? (
+                      <LocaleLink
+                        href={`/roles/${user.role.id}`}
+                        className="text-primary-600 hover:text-primary-900"
+                      >
+                        {user.role.name}
+                      </LocaleLink>
+                    ) : (
+                      user.role?.name || t('common.na')
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span

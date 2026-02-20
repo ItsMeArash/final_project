@@ -36,7 +36,7 @@ For detailed first-time setup, see [SETUP.md](SETUP.md).
 |---------|----------|
 | Go 1.21+, Gin, PostgreSQL, GORM | Next.js 14, React 18, TypeScript |
 | JWT, WebSocket (gorilla/websocket) | Tailwind, Zustand, TanStack Query |
-| OTP (console for dev) | Highcharts, Axios |
+| - | Highcharts, Axios |
 
 ## Features
 

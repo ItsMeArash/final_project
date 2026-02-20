@@ -8,6 +8,8 @@ import { usersService } from '@/services/users'
 import { rolesService } from '@/services/roles'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
 import { PageSpinner } from '@/components/ui/PageSpinner'
+import { LocaleLink } from '@/components/LocaleLink'
+import { useAuthStore } from '@/stores/authStore'
 
 export default function EditUserPage() {
   const params = useParams()
@@ -15,6 +17,7 @@ export default function EditUserPage() {
   const lang = params?.lang as string
   const { t } = useDictionary()
   const router = useRouter()
+  const { hasPermission } = useAuthStore()
   const [formData, setFormData] = useState({
     full_name: '',
     username: '',
@@ -128,9 +131,19 @@ export default function EditUserPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('users.role')}
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  {t('users.role')}
+                </label>
+                {hasPermission('ROLE_MANAGE') && (
+                  <LocaleLink
+                    href="/roles"
+                    className="text-sm text-primary-600 hover:text-primary-900"
+                  >
+                    {t('roles.manageRoles')}
+                  </LocaleLink>
+                )}
+              </div>
               <select
                 required
                 value={formData.role_id}

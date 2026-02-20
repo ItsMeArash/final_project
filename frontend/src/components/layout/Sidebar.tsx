@@ -7,6 +7,7 @@ import { useDictionary } from '@/contexts/DictionaryContext'
 import {
   LayoutDashboard,
   Users,
+  Shield,
   BarChart3,
   MessageCircle,
 } from 'lucide-react'
@@ -19,6 +20,7 @@ interface SidebarProps {
 const menuItems = [
   { labelKey: 'layout.dashboard', href: '/dashboard', permission: null, Icon: LayoutDashboard },
   { labelKey: 'layout.users', href: '/users', permission: 'USER_READ', Icon: Users },
+  { labelKey: 'layout.roles', href: '/roles', permission: 'ROLE_MANAGE', Icon: Shield },
   { labelKey: 'layout.analytics', href: '/analytics', permission: 'ANALYTICS_VIEW', Icon: BarChart3 },
   { labelKey: 'layout.chat', href: '/chat', permission: 'CHAT_SEND', Icon: MessageCircle },
 ] as const

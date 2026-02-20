@@ -12,6 +12,7 @@
     "logout": "Logout",
     "dashboard": "Dashboard",
     "users": "Users",
+    "roles": "Roles",
     "analytics": "Analytics",
     "chat": "Chat"
   },
@@ -87,12 +88,32 @@
     "send": "Send",
     "selectUserToChat": "Select a user to start chatting"
   },
+  "roles": {
+    "title": "Roles",
+    "name": "Name",
+    "description": "Description",
+    "permissions": "Permissions",
+    "editPermissions": "Edit Permissions",
+    "manageRoles": "Manage roles",
+    "backToRoles": "Back to Roles",
+    "loadingRoles": "Loading roles...",
+    "loadingRole": "Loading role...",
+    "savePermissions": "Save Permissions",
+    "permissionsSaved": "Permissions saved successfully",
+    "errorSaving": "Error saving permissions. Please try again.",
+    "userManagement": "User Management",
+    "roleManagement": "Roles",
+    "analytics": "Analytics",
+    "chat": "Chat",
+    "other": "Other"
+  },
   "loading": {
     "default": "Loading...",
     "dashboard": "Loading dashboard...",
     "users": "Loading users...",
     "user": "Loading user...",
     "analytics": "Loading analytics...",
-    "chat": "Loading chat..."
+    "chat": "Loading chat...",
+    "roles": "Loading roles..."
   }
 }
