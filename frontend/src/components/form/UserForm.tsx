@@ -75,8 +75,16 @@ export function UserForm(props: CreateUserFormProps | EditUserFormProps) {
       label: `${r.name}${r.description ? ` - ${r.description}` : ''}`,
     })) ?? []
 
+  const handleFormSubmit = (data: CreateUserFormData | UpdateUserFormData) => {
+    if (props.mode === 'create') {
+      props.onSubmit(data as CreateUserFormData)
+    } else {
+      props.onSubmit(data as UpdateUserFormData)
+    }
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex h-full flex-col">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex h-full flex-col">
       <div className="flex-1 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div className="border-b border-gray-200 bg-gray-50/50 px-6 py-5 dark:border-gray-700 dark:bg-gray-700/30">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
