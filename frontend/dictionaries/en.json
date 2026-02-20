@@ -60,7 +60,9 @@
     "errorUpdating": "Error updating user. Please check all fields and try again.",
     "creating": "Creating...",
     "updating": "Updating...",
-    "updateUser": "Update User"
+    "updateUser": "Update User",
+    "formSubtitleCreate": "Fill in the details below to create a new user account.",
+    "formSubtitleEdit": "Update the user information below."
   },
   "analytics": {
     "title": "Analytics",
@@ -115,5 +117,21 @@
     "analytics": "Loading analytics...",
     "chat": "Loading chat...",
     "roles": "Loading roles..."
+  },
+  "validation": {
+    "fullNameRequired": "Full name is required",
+    "fullNameMax": "Full name must be at most 100 characters",
+    "usernameMin": "Username must be at least 3 characters",
+    "usernameMax": "Username must be at most 50 characters",
+    "usernamePattern": "Username can only contain letters, numbers, underscores and hyphens",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordUppercase": "Password must contain at least one uppercase letter",
+    "passwordLowercase": "Password must contain at least one lowercase letter",
+    "passwordNumber": "Password must contain at least one number",
+    "passwordOptional": "Password must be at least 8 characters with uppercase, lowercase and number",
+    "roleRequired": "Please select a role",
+    "passwordHint": "Min 8 chars, 1 uppercase, 1 lowercase, 1 number",
+    "placeholderFullName": "John Doe",
+    "placeholderUsername": "johndoe"
   }
 }
