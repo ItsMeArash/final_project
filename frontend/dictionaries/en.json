@@ -86,6 +86,8 @@
   },
   "chat": {
     "onlineUsers": "Online Users",
+    "noOnlineUsers": "No users online",
+    "isTyping": "is typing...",
     "typeMessage": "Type a message...",
     "send": "Send",
     "selectUserToChat": "Select a user to start chatting"

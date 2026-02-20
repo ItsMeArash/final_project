@@ -48,6 +48,22 @@ func (c *Client) ReadPump() {
 		message.SenderID = c.UserID
 		message.Timestamp = time.Now().Format(time.RFC3339)
 
+		// Forward typing status to receiver without saving
+		if message.Type == "typing" || message.Type == "typing_stop" {
+			if message.ReceiverID != nil {
+				typingPayload := map[string]interface{}{
+					"type":        message.Type,
+					"sender_id":   c.UserID.String(),
+					"receiver_id": message.ReceiverID.String(),
+					"username":    c.Username,
+				}
+				messageBytes, _ = json.Marshal(typingPayload)
+				message.Raw = messageBytes
+				c.Hub.Broadcast(message)
+			}
+			continue
+		}
+
 		// Save message to database if it's a chat message
 		if message.Type == "chat" {
 			chatMessage := models.ChatMessage{

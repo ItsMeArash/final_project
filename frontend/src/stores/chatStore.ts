@@ -22,10 +22,12 @@ interface ChatState {
   messages: ChatMessage[]
   onlineUsers: OnlineUser[]
   selectedUserId: string | null
+  typingUserId: string | null
   setMessages: (messages: ChatMessage[]) => void
   addMessage: (message: ChatMessage) => void
   setOnlineUsers: (users: OnlineUser[]) => void
   setSelectedUser: (userId: string | null) => void
+  setTypingUser: (userId: string | null) => void
   clearChat: () => void
 }
 
@@ -33,6 +35,7 @@ export const useChatStore = create<ChatState>((set) => ({
   messages: [],
   onlineUsers: [],
   selectedUserId: null,
+  typingUserId: null,
   setMessages: (messages) => set({ messages }),
   addMessage: (message) =>
     set((state) => {
@@ -50,5 +53,6 @@ export const useChatStore = create<ChatState>((set) => ({
     set({ onlineUsers: unique })
   },
   setSelectedUser: (userId) => set({ selectedUserId: userId }),
-  clearChat: () => set({ messages: [], selectedUserId: null }),
+  setTypingUser: (userId) => set({ typingUserId: userId }),
+  clearChat: () => set({ messages: [], selectedUserId: null, typingUserId: null }),
 }))

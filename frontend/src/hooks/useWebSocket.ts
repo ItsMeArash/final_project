@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import { useAuthStore } from '@/stores/authStore'
 import { useChatStore, ChatMessage } from '@/stores/chatStore'
 
@@ -8,7 +8,7 @@ const WS_URL = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:4010/ws/chat'
 
 export function useWebSocket() {
   const { token } = useAuthStore()
-  const { addMessage, setOnlineUsers } = useChatStore()
+  const { addMessage, setOnlineUsers, setTypingUser } = useChatStore()
   const wsRef = useRef<WebSocket | null>(null)
 
   useEffect(() => {
@@ -37,6 +37,12 @@ export function useWebSocket() {
             addMessage(message)
           } else if (data.type === 'online_users') {
             setOnlineUsers(data.users || [])
+          } else if (data.type === 'typing' && data.sender_id) {
+            setTypingUser(data.sender_id)
+            // Clear after 4s if typing_stop is lost
+            setTimeout(() => setTypingUser(null), 4000)
+          } else if (data.type === 'typing_stop' && data.sender_id) {
+            setTypingUser(null)
           }
         } catch (error) {
           console.error('Error parsing WebSocket message:', error)
@@ -62,7 +68,7 @@ export function useWebSocket() {
         wsRef.current.close()
       }
     }
-  }, [token, addMessage, setOnlineUsers])
+  }, [token, addMessage, setOnlineUsers, setTypingUser])
 
   const sendMessage = (message: string, receiverId?: string) => {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
@@ -76,5 +82,21 @@ export function useWebSocket() {
     }
   }
 
-  return { sendMessage }
+  const sendTyping = useCallback((receiverId: string) => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(
+        JSON.stringify({ type: 'typing', receiver_id: receiverId })
+      )
+    }
+  }, [])
+
+  const sendTypingStop = useCallback((receiverId: string) => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(
+        JSON.stringify({ type: 'typing_stop', receiver_id: receiverId })
+      )
+    }
+  }, [])
+
+  return { sendMessage, sendTyping, sendTypingStop }
 }
