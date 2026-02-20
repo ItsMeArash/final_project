@@ -115,15 +115,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 dark:bg-gray-900 sm:px-6">
+      <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-md dark:bg-gray-800">
         <div className="relative">
           <div className="absolute top-0 right-0 flex gap-1">
             <button
               type="button"
               onClick={() => switchLocale('fa')}
-              className={`px-2 py-1 text-sm rounded ${
-                lang === 'fa' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              className={`rounded px-2 py-1 text-sm ${
+                lang === 'fa' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500'
               }`}
             >
               FA
@@ -131,14 +131,14 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => switchLocale('en')}
-              className={`px-2 py-1 text-sm rounded ${
-                lang === 'en' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              className={`rounded px-2 py-1 text-sm ${
+                lang === 'en' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500'
               }`}
             >
               EN
             </button>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
             {t('auth.loginTitle')}
           </h2>
         </div>
@@ -146,7 +146,7 @@ export default function LoginPage() {
         {step === 'credentials' && (
           <form className="mt-8 space-y-6" onSubmit={handleCredentialsSubmit}>
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t('auth.username')}
               </label>
               <input
@@ -156,12 +156,12 @@ export default function LoginPage() {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t('auth.password')}
               </label>
               <input
@@ -171,18 +171,18 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
 
             {loginMutation.isError && (
-              <div className="text-red-600 text-sm">{t('auth.invalidCredentials')}</div>
+              <div className="text-sm text-red-600 dark:text-red-400">{t('auth.invalidCredentials')}</div>
             )}
 
             <button
               type="submit"
               disabled={loginMutation.isPending}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+              className="flex w-full justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-gray-800"
             >
               {loginMutation.isPending ? t('auth.loggingIn') : t('auth.login')}
             </button>
@@ -192,7 +192,7 @@ export default function LoginPage() {
         {step === 'captcha' && (
           <form className="mt-8 space-y-6" onSubmit={handleCaptchaSubmit}>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {captchaQuestion}
               </label>
               <input
@@ -200,19 +200,19 @@ export default function LoginPage() {
                 required
                 value={captchaAnswer}
                 onChange={(e) => setCaptchaAnswer(e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
                 placeholder={t('auth.enterAnswer')}
               />
             </div>
 
             {verifyCaptchaMutation.isError && (
-              <div className="text-red-600 text-sm">{t('auth.invalidCaptcha')}</div>
+              <div className="text-sm text-red-600 dark:text-red-400">{t('auth.invalidCaptcha')}</div>
             )}
 
             <button
               type="submit"
               disabled={verifyCaptchaMutation.isPending}
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+              className="flex w-full justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-gray-800"
             >
               {verifyCaptchaMutation.isPending ? t('auth.verifying') : t('auth.verifyCaptcha')}
             </button>

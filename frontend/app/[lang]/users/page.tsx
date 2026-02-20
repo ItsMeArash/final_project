@@ -37,8 +37,8 @@ export default function UsersPage() {
   return (
     <DashboardLayout requiredPermission="USER_READ">
       <div>
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">{t('users.title')}</h1>
+        <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{t('users.title')}</h1>
           {hasPermission('USER_CREATE') && (
             <LocaleLink
               href="/users/create"
@@ -50,41 +50,41 @@ export default function UsersPage() {
           )}
         </div>
 
-        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                   {t('users.name')}
                 </th>
-                <th className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                   {t('users.username')}
                 </th>
-                <th className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                   {t('users.role')}
                 </th>
-                <th className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                   {t('users.status')}
                 </th>
-                <th className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                   {t('users.actions')}
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
               {users?.map((user) => (
                 <tr key={user.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-start">
+                  <td className="whitespace-nowrap px-6 py-4 text-start text-sm font-medium text-gray-900 dark:text-gray-100">
                     {user.full_name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-start">
+                  <td className="whitespace-nowrap px-6 py-4 text-start text-sm text-gray-500 dark:text-gray-400">
                     {user.username}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-start">
+                  <td className="whitespace-nowrap px-6 py-4 text-start text-sm text-gray-500 dark:text-gray-400">
                     {user.role && hasPermission('ROLE_MANAGE') ? (
                       <LocaleLink
                         href={`/roles/${user.role.id}`}
-                        className="text-primary-600 hover:text-primary-900"
+                        className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
                       >
                         {user.role.name}
                       </LocaleLink>
@@ -92,23 +92,23 @@ export default function UsersPage() {
                       user.role?.name || t('common.na')
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-start">
+                  <td className="whitespace-nowrap px-6 py-4 text-start">
                     <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
                         user.is_active
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                          : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                       }`}
                     >
                       {user.is_active ? t('common.active') : t('common.inactive')}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-start">
+                  <td className="whitespace-nowrap px-6 py-4 text-start text-sm font-medium">
                     <div className="inline-flex flex-wrap items-center gap-2">
                       {hasPermission('USER_UPDATE') && (
                         <LocaleLink
                           href={`/users/${user.id}`}
-                          className="inline-flex items-center gap-1.5 text-primary-600 transition-colors hover:text-primary-900"
+                          className="inline-flex items-center gap-1.5 text-primary-600 transition-colors hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
                         >
                           <Pencil className="h-4 w-4" />
                           {t('users.edit')}
@@ -121,7 +121,7 @@ export default function UsersPage() {
                               deleteMutation.mutate(user.id)
                             }
                           }}
-                          className="inline-flex items-center gap-1.5 text-red-600 transition-colors hover:text-red-900"
+                          className="inline-flex items-center gap-1.5 text-red-600 transition-colors hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
                         >
                           <Trash2 className="h-4 w-4" />
                           {t('users.delete')}

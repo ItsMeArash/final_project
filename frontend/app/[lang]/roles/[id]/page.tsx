@@ -98,41 +98,41 @@ export default function RoleDetailPage() {
   return (
     <DashboardLayout requiredPermission="ROLE_MANAGE">
       <div>
-        <div className="flex items-center gap-4 mb-6">
+        <div className="mb-6 flex items-center gap-4">
           <LocaleLink
             href="/roles"
-            className="inline-flex items-center gap-1.5 text-gray-600 hover:text-gray-900"
+            className="inline-flex items-center gap-1.5 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
           >
             <ArrowLeft className="h-4 w-4" />
             {t('roles.backToRoles')}
           </LocaleLink>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-100">
           {roleData.role.name}
         </h1>
-        <p className="text-gray-500 mb-6">
+        <p className="mb-6 text-gray-500 dark:text-gray-400">
           {roleData.role.description || t('common.na')}
         </p>
 
-        <div className="space-y-6 max-w-2xl">
+        <div className="max-w-2xl space-y-6">
           {groupedPermissions.map(({ key, permissions }) => (
-            <fieldset key={key} className="border border-gray-200 rounded-lg p-4">
-              <legend className="text-sm font-medium text-gray-700 px-2">
+            <fieldset key={key} className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+              <legend className="px-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t(`roles.${key}`)}
               </legend>
-              <div className="flex flex-wrap gap-4 mt-2">
+              <div className="mt-2 flex flex-wrap gap-4">
                 {permissions.map((perm) => (
                   <label
                     key={perm.id}
-                    className="flex items-center gap-2 cursor-pointer"
+                    className="flex cursor-pointer items-center gap-2"
                   >
                     <input
                       type="checkbox"
                       checked={selectedIds.has(perm.id)}
                       onChange={() => handleToggle(perm.id)}
-                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700"
                     />
-                    <span className="text-sm text-gray-700">{perm.name}</span>
+                    <span className="text-sm text-gray-700 dark:text-gray-300">{perm.name}</span>
                   </label>
                 ))}
               </div>
@@ -141,19 +141,19 @@ export default function RoleDetailPage() {
         </div>
 
         {assignMutation.isSuccess && (
-          <p className="mt-4 text-green-600 text-sm">
+          <p className="mt-4 text-sm text-green-600 dark:text-green-400">
             {t('roles.permissionsSaved')}
           </p>
         )}
         {assignMutation.isError && (
-          <p className="mt-4 text-red-600 text-sm">{t('roles.errorSaving')}</p>
+          <p className="mt-4 text-sm text-red-600 dark:text-red-400">{t('roles.errorSaving')}</p>
         )}
 
         <div className="mt-6 flex gap-4">
           <button
             onClick={handleSave}
             disabled={assignMutation.isPending}
-            className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50"
+            className="rounded-md bg-primary-600 px-4 py-2 text-white hover:bg-primary-700 disabled:opacity-50"
           >
             {assignMutation.isPending ? t('loading.default') : t('roles.savePermissions')}
           </button>

@@ -22,7 +22,7 @@ export function PageSpinner({ message = 'Loading...', fullScreen = true }: PageS
         aria-hidden
       />
       {message && (
-        <p className="text-sm font-medium text-gray-600 animate-pulse">{message}</p>
+        <p className="animate-pulse text-sm font-medium text-gray-600 dark:text-gray-400">{message}</p>
       )}
     </div>
   )

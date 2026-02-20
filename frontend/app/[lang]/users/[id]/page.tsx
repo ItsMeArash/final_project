@@ -59,8 +59,8 @@ export default function EditUserPage() {
 
   return (
     <DashboardLayout requiredPermission="USER_UPDATE">
-      <div className="-m-8 flex min-h-[calc(100vh-4rem)] flex-col p-8">
-        <h1 className="mb-6 text-3xl font-bold text-gray-900">
+      <div className="-m-4 flex min-h-[calc(100vh-4rem)] flex-col p-4 sm:-m-6 sm:p-6 lg:-m-8 lg:p-8">
+        <h1 className="mb-6 text-3xl font-bold text-gray-900 dark:text-gray-100">
           {t('users.editUser')}
         </h1>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Navbar } from './Navbar'
 import { Sidebar } from './Sidebar'
 import { ProtectedRoute } from './ProtectedRoute'
@@ -26,17 +26,27 @@ function DashboardContent({
   const { t } = useDictionary()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar
         onToggleSidebar={() => setSidebarExpanded((p) => !p)}
         isSidebarExpanded={sidebarExpanded}
       />
+      {sidebarExpanded && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={() => setSidebarExpanded(false)}
+          aria-hidden
+        />
+      )}
       <div className="flex min-h-[calc(100vh-4rem)]">
-        <Sidebar isExpanded={sidebarExpanded} />
-        <main className="relative flex-1 p-8 transition-all duration-300 ease-in-out">
+        <Sidebar
+          isExpanded={sidebarExpanded}
+          onClose={() => setSidebarExpanded(false)}
+        />
+        <main className="relative flex-1 p-4 transition-all duration-300 ease-in-out sm:p-6 lg:p-8">
           {isPending && (
             <div
-              className="absolute inset-0 z-10 flex items-center justify-center bg-gray-50/80 backdrop-blur-[1px]"
+              className="absolute inset-0 z-10 flex items-center justify-center bg-gray-50/80 backdrop-blur-[1px] dark:bg-gray-900/80"
               aria-live="polite"
             >
               <PageSpinner message={t('common.loading')} fullScreen={false} />
@@ -53,7 +63,12 @@ export function DashboardLayout({
   children,
   requiredPermission,
 }: DashboardLayoutProps) {
-  const [sidebarExpanded, setSidebarExpanded] = useState(true)
+  const [sidebarExpanded, setSidebarExpanded] = useState(false)
+
+  useEffect(() => {
+    const isDesktop = window.matchMedia('(min-width: 1024px)').matches
+    setSidebarExpanded(isDesktop)
+  }, [])
 
   return (
     <ProtectedRoute requiredPermission={requiredPermission}>

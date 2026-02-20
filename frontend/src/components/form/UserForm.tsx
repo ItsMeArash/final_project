@@ -77,10 +77,10 @@ export function UserForm(props: CreateUserFormProps | EditUserFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex h-full flex-col">
-      <div className="flex-1 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-        <div className="border-b border-gray-200 bg-gray-50/50 px-6 py-5">
-          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-          <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+      <div className="flex-1 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <div className="border-b border-gray-200 bg-gray-50/50 px-6 py-5 dark:border-gray-700 dark:bg-gray-700/30">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{subtitle}</p>
         </div>
 
         <div className="p-6">
@@ -123,13 +123,13 @@ export function UserForm(props: CreateUserFormProps | EditUserFormProps) {
 
             <div>
               <div className="mb-1.5 flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {t('users.role')}
                 </span>
                 {hasRolePermission && (
                   <LocaleLink
                     href="/roles"
-                    className="text-sm text-primary-600 hover:text-primary-900"
+                    className="text-sm text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
                   >
                     {t('roles.manageRoles')}
                   </LocaleLink>
@@ -154,7 +154,7 @@ export function UserForm(props: CreateUserFormProps | EditUserFormProps) {
 
           {hasError && (
             <div
-              className="mt-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700"
+              className="mt-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-red-900/30 dark:text-red-400"
               role="alert"
             >
               {errorMessage}
@@ -163,18 +163,18 @@ export function UserForm(props: CreateUserFormProps | EditUserFormProps) {
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-gray-200 pt-6">
+      <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-gray-200 pt-6 dark:border-gray-700">
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50"
+          className="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-gray-800"
         >
           {isPending ? pendingLabel : submitLabel}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 dark:focus:ring-offset-gray-800"
         >
           {t('common.cancel')}
         </button>

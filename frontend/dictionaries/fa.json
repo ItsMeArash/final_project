@@ -14,7 +14,9 @@
     "users": "کاربران",
     "roles": "نقش‌ها",
     "analytics": "تحلیل‌ها",
-    "chat": "چت"
+    "chat": "چت",
+    "themeLight": "حالت روشن",
+    "themeDark": "حالت تاریک"
   },
   "auth": {
     "loginTitle": "ورود به پنل مدیریت",
@@ -88,6 +90,7 @@
     "onlineUsers": "کاربران آنلاین",
     "noOnlineUsers": "کاربر آنلاینی وجود ندارد",
     "isTyping": "در حال تایپ است...",
+    "newMessages": "پیام‌های جدید",
     "typeMessage": "پیام بنویسید...",
     "send": "ارسال",
     "selectUserToChat": "کاربری را برای شروع چت انتخاب کنید"

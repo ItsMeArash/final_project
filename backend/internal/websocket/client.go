@@ -83,6 +83,10 @@ func (c *Client) ReadPump() {
 				"sender_id":  chatMessage.SenderID.String(),
 				"message":    chatMessage.Message,
 				"created_at": chatMessage.CreatedAt.Format("2006-01-02T15:04:05.000Z"),
+				"sender": map[string]interface{}{
+					"id":       c.UserID.String(),
+					"username": c.Username,
+				},
 			}
 			if chatMessage.ReceiverID != nil {
 				broadcastPayload["receiver_id"] = chatMessage.ReceiverID.String()

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useTheme } from 'next-themes'
 import { useDictionary } from '@/contexts/DictionaryContext'
 import { useParams } from 'next/navigation'
 import { analyticsService } from '@/services/analytics'
@@ -33,11 +34,48 @@ function getChartFontOptions(lang: string): Highcharts.Options {
   }
 }
 
+function getChartThemeOptions(isDark: boolean): Highcharts.Options {
+  if (!isDark) return { chart: { backgroundColor: 'transparent' } }
+  return {
+    chart: { backgroundColor: 'transparent' },
+    title: { style: { color: '#e5e7eb' } },
+    xAxis: {
+      gridLineColor: '#4b5563',
+      labels: { style: { color: '#9ca3af' } },
+      lineColor: '#4b5563',
+      tickColor: '#4b5563',
+    },
+    yAxis: {
+      gridLineColor: '#4b5563',
+      labels: { style: { color: '#9ca3af' } },
+      lineColor: '#4b5563',
+      tickColor: '#4b5563',
+      title: { style: { color: '#9ca3af' } },
+    },
+    legend: { itemStyle: { color: '#9ca3af' }, itemHoverStyle: { color: '#e5e7eb' } },
+    tooltip: {
+      backgroundColor: '#374151',
+      borderColor: '#4b5563',
+      style: { color: '#e5e7eb' },
+    },
+    plotOptions: {
+      series: {
+        borderColor: '#374151',
+      },
+    },
+  }
+}
+
 export default function AnalyticsPage() {
   const params = useParams()
   const lang = params?.lang as string
+  const { resolvedTheme } = useTheme()
   const { t } = useDictionary()
   const fontOptions = getChartFontOptions(lang)
+  const themeOptions = useMemo(
+    () => getChartThemeOptions(resolvedTheme === 'dark'),
+    [resolvedTheme]
+  )
   const [startDate, setStartDate] = useState(
     format(subDays(new Date(), 30), 'yyyy-MM-dd')
   )
@@ -54,9 +92,20 @@ export default function AnalyticsPage() {
       }),
   })
 
+  const mergeTitle = (text: string) => ({
+    ...fontOptions.title,
+    ...themeOptions.title,
+    style: {
+      ...(fontOptions.title as Highcharts.TitleOptions)?.style,
+      ...(themeOptions.title as Highcharts.TitleOptions)?.style,
+    },
+    text,
+  })
+
   const lineChartOptions: Highcharts.Options = {
+    ...themeOptions,
     ...fontOptions,
-    title: { ...fontOptions.title, text: t('analytics.dailyActiveUsers') },
+    title: mergeTitle(t('analytics.dailyActiveUsers')),
     xAxis: { ...fontOptions.xAxis, categories: data?.line_chart.labels || [] },
     yAxis: {
       ...fontOptions.yAxis,
@@ -74,8 +123,9 @@ export default function AnalyticsPage() {
   }
 
   const barChartOptions: Highcharts.Options = {
+    ...themeOptions,
     ...fontOptions,
-    title: { ...fontOptions.title, text: t('analytics.monthlyRevenue') },
+    title: mergeTitle(t('analytics.monthlyRevenue')),
     xAxis: { ...fontOptions.xAxis, categories: data?.bar_chart.labels || [] },
     yAxis: {
       ...fontOptions.yAxis,
@@ -93,9 +143,10 @@ export default function AnalyticsPage() {
   }
 
   const pieChartOptions: Highcharts.Options = {
+    ...themeOptions,
     ...fontOptions,
-    title: { ...fontOptions.title, text: t('analytics.categoryDistribution') },
-    chart: { ...fontOptions.chart, type: 'pie' },
+    title: mergeTitle(t('analytics.categoryDistribution')),
+    chart: { ...themeOptions.chart, ...fontOptions.chart, type: 'pie' },
     series: [
       {
         type: 'pie',
@@ -110,8 +161,9 @@ export default function AnalyticsPage() {
   }
 
   const areaChartOptions: Highcharts.Options = {
+    ...themeOptions,
     ...fontOptions,
-    title: { ...fontOptions.title, text: t('analytics.productPerformance') },
+    title: mergeTitle(t('analytics.productPerformance')),
     xAxis: { ...fontOptions.xAxis, categories: data?.area_chart.labels || [] },
     yAxis: {
       ...fontOptions.yAxis,
@@ -131,34 +183,34 @@ export default function AnalyticsPage() {
   return (
     <DashboardLayout requiredPermission="ANALYTICS_VIEW">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">{t('analytics.title')}</h1>
+        <h1 className="mb-6 text-3xl font-bold text-gray-900 dark:text-gray-100">{t('analytics.title')}</h1>
 
-        <div className="mb-6 bg-white shadow rounded-lg p-4">
-          <div className="flex space-x-4">
+        <div className="mb-6 rounded-lg bg-white p-4 shadow dark:bg-gray-800">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t('analytics.startDate')}
               </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md"
+                className="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t('analytics.endDate')}
               </label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md"
+                className="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t('analytics.category')}
               </label>
               <input
@@ -166,7 +218,7 @@ export default function AnalyticsPage() {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 placeholder={t('analytics.filterByCategory')}
-                className="px-3 py-2 border border-gray-300 rounded-md"
+                className="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
           </div>
@@ -176,50 +228,50 @@ export default function AnalyticsPage() {
           <PageSpinner message={t('analytics.loadingAnalytics')} fullScreen={false} />
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-              <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-sm font-medium text-gray-500">{t('analytics.totalUsers')}</h3>
-                <p className="text-2xl font-bold text-gray-900">
+            <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
+              <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('analytics.totalUsers')}</h3>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {data?.kpis.total_users || 0}
                 </p>
               </div>
-              <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-sm font-medium text-gray-500">{t('analytics.activeUsers')}</h3>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('analytics.activeUsers')}</h3>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {data?.kpis.active_users || 0}
                 </p>
               </div>
-              <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-sm font-medium text-gray-500">{t('analytics.revenue')}</h3>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('analytics.revenue')}</h3>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   ${data?.kpis.total_revenue?.toLocaleString() || 0}
                 </p>
               </div>
-              <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-sm font-medium text-gray-500">{t('analytics.growthRate')}</h3>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('analytics.growthRate')}</h3>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {data?.kpis.growth_rate?.toFixed(1) || 0}%
                 </p>
               </div>
-              <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-sm font-medium text-gray-500">{t('analytics.avgSession')}</h3>
-                <p className="text-2xl font-bold text-gray-900">
+              <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('analytics.avgSession')}</h3>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {data?.kpis.avg_session_time?.toFixed(1) || 0}m
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-white shadow rounded-lg p-6">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
                 <HighchartsReact highcharts={Highcharts} options={lineChartOptions} />
               </div>
-              <div className="bg-white shadow rounded-lg p-6">
+              <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
                 <HighchartsReact highcharts={Highcharts} options={barChartOptions} />
               </div>
-              <div className="bg-white shadow rounded-lg p-6">
+              <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
                 <HighchartsReact highcharts={Highcharts} options={pieChartOptions} />
               </div>
-              <div className="bg-white shadow rounded-lg p-6">
+              <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
                 <HighchartsReact highcharts={Highcharts} options={areaChartOptions} />
               </div>
             </div>

@@ -5,23 +5,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 255, 255, 255;
-    --background-end-rgb: 255, 255, 255;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-start-rgb));
+  @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
 }
 
 /* Persian font (Yekan Bakh FaNum) when language is fa - override Inter */
@@ -38,11 +23,12 @@ html[lang^='fa-'] body {
   input[type="tel"],
   input[type="url"],
   input[type="search"],
+  input[type="date"],
   textarea,
   select {
-    @apply text-gray-900 bg-white;
+    @apply text-gray-900 bg-white border-gray-300 dark:text-gray-100 dark:bg-gray-800 dark:border-gray-600;
   }
-  
+
   input[type="text"]:disabled,
   input[type="password"]:disabled,
   input[type="email"]:disabled,
@@ -50,9 +36,10 @@ html[lang^='fa-'] body {
   input[type="tel"]:disabled,
   input[type="url"]:disabled,
   input[type="search"]:disabled,
+  input[type="date"]:disabled,
   textarea:disabled,
   select:disabled {
-    @apply text-gray-500 bg-gray-100;
+    @apply text-gray-500 bg-gray-100 dark:text-gray-400 dark:bg-gray-700;
   }
 }
 

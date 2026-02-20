@@ -14,7 +14,9 @@
     "users": "Users",
     "roles": "Roles",
     "analytics": "Analytics",
-    "chat": "Chat"
+    "chat": "Chat",
+    "themeLight": "Light mode",
+    "themeDark": "Dark mode"
   },
   "auth": {
     "loginTitle": "Admin Dashboard Login",
@@ -88,6 +90,7 @@
     "onlineUsers": "Online Users",
     "noOnlineUsers": "No users online",
     "isTyping": "is typing...",
+    "newMessages": "New messages",
     "typeMessage": "Type a message...",
     "send": "Send",
     "selectUserToChat": "Select a user to start chatting"
