@@ -54,6 +54,7 @@ func main() {
 		auth := api.Group("/auth")
 		{
 			auth.POST("/login", handlers.Login)
+			auth.POST("/register", handlers.Register)
 			auth.GET("/captcha", handlers.GetCaptcha)
 			auth.POST("/verify-captcha", handlers.VerifyCaptcha)
 		}

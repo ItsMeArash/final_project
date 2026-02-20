@@ -118,6 +118,8 @@ export function UserForm(props: CreateUserFormProps | EditUserFormProps) {
                 placeholder="••••••••"
                 autoComplete={isCreate ? 'new-password' : 'current-password'}
                 hint={isCreate ? t('validation.passwordHint') : undefined}
+                showPasswordLabel={t('auth.showPassword')}
+                hidePasswordLabel={t('auth.hidePassword')}
               />
             </div>
 

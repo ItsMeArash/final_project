@@ -28,7 +28,24 @@
     "enterAnswer": "Enter answer",
     "invalidCaptcha": "Invalid captcha. Please try again.",
     "verifying": "Verifying...",
-    "verifyCaptcha": "Verify Captcha"
+    "verifyCaptcha": "Verify Captcha",
+    "registerTitle": "Create Account",
+    "register": "Sign Up",
+    "registering": "Creating account...",
+    "registerError": "Registration failed. Please try again.",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "optional": "optional",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "errors": {
+      "USERNAME_INVALID": "Username can only contain letters, numbers, underscores and hyphens",
+      "USERNAME_TAKEN": "This username is already taken. Please choose a different one.",
+      "VALIDATION": "Please check your input. Username (min 3 chars) and password (min 8 chars) are required.",
+      "REGISTRATION_UNAVAILABLE": "Registration is not available at the moment",
+      "CREATE_FAILED": "We couldn't create your account. Please try again.",
+      "LOGIN_AFTER_FAILED": "Account created but automatic login failed. Please log in manually."
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -39,7 +56,29 @@
     "viewAnalytics": "View Analytics",
     "chatWithTeam": "Chat with Team",
     "systemStatus": "System Status",
-    "allSystemsOperational": "All systems operational"
+    "allSystemsOperational": "All systems operational",
+    "widgets": {
+      "chatGlance": "Chat",
+      "weather": "Weather",
+      "todos": "Todos",
+      "stickyNotes": "Sticky Notes"
+    },
+    "openChat": "Open Chat",
+    "addTodo": "Add todo",
+    "addNote": "Add note",
+    "noTodos": "No todos yet",
+    "noNotes": "No notes yet",
+    "noMessages": "No recent messages",
+    "noNewMessages": "No new messages",
+    "viewFullConversation": "View full conversation",
+    "you": "You",
+    "unreadMessages": "unread",
+    "weather": {
+      "loading": "Loading weather...",
+      "error": "Could not load weather",
+      "location": "Location",
+      "feelsLike": "Feels like"
+    }
   },
   "users": {
     "title": "Users",

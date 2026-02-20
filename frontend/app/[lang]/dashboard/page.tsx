@@ -1,41 +1,50 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useDictionary } from '@/contexts/DictionaryContext'
+import { useAuthStore } from '@/stores/authStore'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
+import { ChatGlanceWidget } from '@/components/dashboard/widgets/ChatGlanceWidget'
+import { WeatherWidget } from '@/components/dashboard/widgets/WeatherWidget'
+import { TodosWidget } from '@/components/dashboard/widgets/TodosWidget'
+import { StickyNotesWidget } from '@/components/dashboard/widgets/StickyNotesWidget'
+
+const DashboardGridClient = dynamic(
+  () =>
+    import('@/components/dashboard/DashboardGrid').then((m) => ({
+      default: m.DashboardGrid,
+    })),
+  { ssr: false }
+)
 
 export default function DashboardPage() {
   const { t } = useDictionary()
+  const { hasPermission } = useAuthStore()
+
+  const visibleWidgets = [
+    ...(hasPermission('CHAT_SEND') ? ['chat' as const] : []),
+    'weather',
+    'todos',
+    'notes',
+  ]
+
+  const widgetComponents: Record<string, React.ReactNode> = {
+    chat: <ChatGlanceWidget />,
+    weather: <WeatherWidget />,
+    todos: <TodosWidget />,
+    notes: <StickyNotesWidget />,
+  }
 
   return (
     <DashboardLayout>
-      <div>
-        <h1 className="mb-6 text-3xl font-bold text-gray-900 dark:text-gray-100">{t('dashboard.title')}</h1>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-            <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-              {t('dashboard.welcomeBack')}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              {t('dashboard.sidebarHint')}
-            </p>
-          </div>
-          <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-            <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-              {t('dashboard.quickActions')}
-            </h3>
-            <ul className="space-y-2 text-gray-600 dark:text-gray-400">
-              <li>• {t('dashboard.manageUsers')}</li>
-              <li>• {t('dashboard.viewAnalytics')}</li>
-              <li>• {t('dashboard.chatWithTeam')}</li>
-            </ul>
-          </div>
-          <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-            <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-              {t('dashboard.systemStatus')}
-            </h3>
-            <p className="font-medium text-green-600 dark:text-green-400">{t('dashboard.allSystemsOperational')}</p>
-          </div>
-        </div>
+      <div className="space-y-4">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 sm:text-3xl">
+          {t('dashboard.title')}
+        </h1>
+        <DashboardGridClient
+          visibleWidgets={visibleWidgets}
+          children={widgetComponents}
+        />
       </div>
     </DashboardLayout>
   )

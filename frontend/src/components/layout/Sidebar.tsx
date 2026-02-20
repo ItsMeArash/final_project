@@ -2,7 +2,7 @@
 
 import { useAuthStore } from '@/stores/authStore'
 import { useChatStore } from '@/stores/chatStore'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter, useParams } from 'next/navigation'
 import { TransitionLocaleLink } from '@/components/TransitionLocaleLink'
 import { useDictionary } from '@/contexts/DictionaryContext'
 import {
@@ -11,12 +11,12 @@ import {
   Shield,
   BarChart3,
   MessageCircle,
+  LogOut,
 } from 'lucide-react'
 
 interface SidebarProps {
   isExpanded: boolean
   onToggle?: () => void
-  onClose?: () => void
 }
 
 const menuItems = [
@@ -27,12 +27,20 @@ const menuItems = [
   { labelKey: 'layout.chat', href: '/chat', permission: 'CHAT_SEND', Icon: MessageCircle, showUnread: true },
 ] as const
 
-export function Sidebar({ isExpanded, onClose }: SidebarProps) {
-  const { hasPermission } = useAuthStore()
+export function Sidebar({ isExpanded }: SidebarProps) {
+  const { hasPermission, clearAuth } = useAuthStore()
   const { unreadByUserId } = useChatStore()
   const unreadCount = Object.values(unreadByUserId).reduce((a, b) => a + b, 0)
   const pathname = usePathname()
+  const router = useRouter()
+  const params = useParams()
+  const lang = params?.lang as string
   const { t } = useDictionary()
+
+  const handleLogout = () => {
+    clearAuth()
+    router.push(`/${lang}/auth/login`)
+  }
 
   const filteredMenuItems = menuItems.filter(
     (item) => !item.permission || hasPermission(item.permission)
@@ -40,7 +48,7 @@ export function Sidebar({ isExpanded, onClose }: SidebarProps) {
 
   return (
     <aside
-      className={`shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 ease-in-out dark:border-gray-700 dark:bg-gray-800
+      className={`flex h-full shrink-0 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-300 ease-in-out dark:border-gray-700 dark:bg-gray-800
         lg:m-4
         ${isExpanded ? 'w-64' : 'w-[72px]'}
         max-lg:fixed max-lg:inset-y-0 max-lg:z-50 max-lg:m-0 max-lg:w-64 max-lg:rounded-none max-lg:border-0
@@ -49,7 +57,7 @@ export function Sidebar({ isExpanded, onClose }: SidebarProps) {
         max-lg:start-0
       `}
     >
-      <nav className="py-4">
+      <nav className="flex h-full flex-col py-4">
         <div className="space-y-1 px-3">
           {filteredMenuItems.map((item) => {
             const pathWithoutLocale = pathname?.replace(/^\/(en|fa)/, '') || '/'
@@ -63,7 +71,6 @@ export function Sidebar({ isExpanded, onClose }: SidebarProps) {
               <TransitionLocaleLink
                 key={item.href}
                 href={item.href}
-                onClick={onClose}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-primary-600 text-white shadow-sm'
@@ -87,6 +94,15 @@ export function Sidebar({ isExpanded, onClose }: SidebarProps) {
               </TransitionLocaleLink>
             )
           })}
+        </div>
+        <div className="mt-auto border-t border-gray-200 px-3 pt-3 lg:hidden dark:border-gray-700">
+          <button
+            onClick={handleLogout}
+            className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30 ${!isExpanded ? 'justify-center' : ''}`}
+          >
+            <LogOut className="h-5 w-5 shrink-0" />
+            {isExpanded && <span className="truncate">{t('layout.logout')}</span>}
+          </button>
         </div>
       </nav>
     </aside>

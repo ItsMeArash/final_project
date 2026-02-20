@@ -36,23 +36,24 @@ function getChartFontOptions(lang: string): Highcharts.Options {
 
 function getChartThemeOptions(isDark: boolean): Highcharts.Options {
   if (!isDark) return { chart: { backgroundColor: 'transparent' } }
+  const labelColor = '#e5e7eb'
   return {
     chart: { backgroundColor: 'transparent' },
     title: { style: { color: '#e5e7eb' } },
     xAxis: {
       gridLineColor: '#4b5563',
-      labels: { style: { color: '#9ca3af' } },
+      labels: { style: { color: labelColor } },
       lineColor: '#4b5563',
       tickColor: '#4b5563',
     },
     yAxis: {
       gridLineColor: '#4b5563',
-      labels: { style: { color: '#9ca3af' } },
+      labels: { style: { color: labelColor } },
       lineColor: '#4b5563',
       tickColor: '#4b5563',
-      title: { style: { color: '#9ca3af' } },
+      title: { style: { color: labelColor } },
     },
-    legend: { itemStyle: { color: '#9ca3af' }, itemHoverStyle: { color: '#e5e7eb' } },
+    legend: { itemStyle: { color: labelColor }, itemHoverStyle: { color: '#f9fafb' } },
     tooltip: {
       backgroundColor: '#374151',
       borderColor: '#4b5563',
@@ -96,20 +97,47 @@ export default function AnalyticsPage() {
     ...fontOptions.title,
     ...themeOptions.title,
     style: {
-      ...(fontOptions.title as Highcharts.TitleOptions)?.style,
       ...(themeOptions.title as Highcharts.TitleOptions)?.style,
+      ...(fontOptions.title as Highcharts.TitleOptions)?.style,
     },
     text,
+  })
+
+  const mergeLegend = () => ({
+    ...themeOptions.legend,
+    ...fontOptions.legend,
+    itemStyle: {
+      ...(themeOptions.legend as Highcharts.LegendOptions)?.itemStyle,
+      ...(fontOptions.legend as Highcharts.LegendOptions)?.itemStyle,
+    },
+  })
+
+  const mergeAxisLabels = (axis: 'xAxis' | 'yAxis') => ({
+    ...(themeOptions[axis] as Highcharts.XAxisOptions)?.labels,
+    ...(fontOptions[axis] as Highcharts.XAxisOptions)?.labels,
+    style: {
+      ...(themeOptions[axis] as Highcharts.XAxisOptions)?.labels?.style,
+      ...(fontOptions[axis] as Highcharts.XAxisOptions)?.labels?.style,
+    },
   })
 
   const lineChartOptions: Highcharts.Options = {
     ...themeOptions,
     ...fontOptions,
+    legend: mergeLegend(),
     title: mergeTitle(t('analytics.dailyActiveUsers')),
-    xAxis: { ...fontOptions.xAxis, categories: data?.line_chart.labels || [] },
+    xAxis: {
+      ...themeOptions.xAxis,
+      ...fontOptions.xAxis,
+      labels: mergeAxisLabels('xAxis'),
+      categories: data?.line_chart.labels || [],
+    },
     yAxis: {
+      ...themeOptions.yAxis,
       ...fontOptions.yAxis,
+      labels: mergeAxisLabels('yAxis'),
       title: {
+        ...(themeOptions.yAxis as Highcharts.YAxisOptions)?.title,
         ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title,
         text: t('analytics.users'),
       },
@@ -125,11 +153,20 @@ export default function AnalyticsPage() {
   const barChartOptions: Highcharts.Options = {
     ...themeOptions,
     ...fontOptions,
+    legend: mergeLegend(),
     title: mergeTitle(t('analytics.monthlyRevenue')),
-    xAxis: { ...fontOptions.xAxis, categories: data?.bar_chart.labels || [] },
+    xAxis: {
+      ...themeOptions.xAxis,
+      ...fontOptions.xAxis,
+      labels: mergeAxisLabels('xAxis'),
+      categories: data?.bar_chart.labels || [],
+    },
     yAxis: {
+      ...themeOptions.yAxis,
       ...fontOptions.yAxis,
+      labels: mergeAxisLabels('yAxis'),
       title: {
+        ...(themeOptions.yAxis as Highcharts.YAxisOptions)?.title,
         ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title,
         text: t('analytics.revenue'),
       },
@@ -146,6 +183,7 @@ export default function AnalyticsPage() {
     ...themeOptions,
     ...fontOptions,
     title: mergeTitle(t('analytics.categoryDistribution')),
+    legend: mergeLegend(),
     chart: { ...themeOptions.chart, ...fontOptions.chart, type: 'pie' },
     series: [
       {
@@ -163,11 +201,20 @@ export default function AnalyticsPage() {
   const areaChartOptions: Highcharts.Options = {
     ...themeOptions,
     ...fontOptions,
+    legend: mergeLegend(),
     title: mergeTitle(t('analytics.productPerformance')),
-    xAxis: { ...fontOptions.xAxis, categories: data?.area_chart.labels || [] },
+    xAxis: {
+      ...themeOptions.xAxis,
+      ...fontOptions.xAxis,
+      labels: mergeAxisLabels('xAxis'),
+      categories: data?.area_chart.labels || [],
+    },
     yAxis: {
+      ...themeOptions.yAxis,
       ...fontOptions.yAxis,
+      labels: mergeAxisLabels('yAxis'),
       title: {
+        ...(themeOptions.yAxis as Highcharts.YAxisOptions)?.title,
         ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title,
         text: t('analytics.value'),
       },
@@ -195,7 +242,7 @@ export default function AnalyticsPage() {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
             <div>
@@ -206,7 +253,7 @@ export default function AnalyticsPage() {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
             <div>
@@ -218,7 +265,7 @@ export default function AnalyticsPage() {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 placeholder={t('analytics.filterByCategory')}
-                className="rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
           </div>

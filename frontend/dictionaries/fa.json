@@ -28,7 +28,24 @@
     "enterAnswer": "پاسخ را وارد کنید",
     "invalidCaptcha": "کپچا نامعتبر است. لطفاً دوباره تلاش کنید.",
     "verifying": "در حال تأیید...",
-    "verifyCaptcha": "تأیید کپچا"
+    "verifyCaptcha": "تأیید کپچا",
+    "registerTitle": "ایجاد حساب کاربری",
+    "register": "ثبت نام",
+    "registering": "در حال ایجاد حساب...",
+    "registerError": "ثبت نام ناموفق بود. لطفاً دوباره تلاش کنید.",
+    "alreadyHaveAccount": "قبلاً حساب دارید؟",
+    "dontHaveAccount": "حساب کاربری ندارید؟",
+    "optional": "اختیاری",
+    "showPassword": "نمایش رمز عبور",
+    "hidePassword": "مخفی کردن رمز عبور",
+    "errors": {
+      "USERNAME_INVALID": "نام کاربری فقط می‌تواند شامل حروف، اعداد، زیرخط و خط تیره باشد",
+      "USERNAME_TAKEN": "این نام کاربری قبلاً استفاده شده است. لطفاً نام دیگری انتخاب کنید.",
+      "VALIDATION": "لطفاً ورودی‌ها را بررسی کنید. نام کاربری (حداقل ۳ کاراکتر) و رمز عبور (حداقل ۸ کاراکتر) الزامی است.",
+      "REGISTRATION_UNAVAILABLE": "ثبت نام در حال حاضر امکان‌پذیر نیست",
+      "CREATE_FAILED": "امکان ایجاد حساب شما وجود نداشت. لطفاً دوباره تلاش کنید.",
+      "LOGIN_AFTER_FAILED": "حساب ایجاد شد اما ورود خودکار ناموفق بود. لطفاً به صورت دستی وارد شوید."
+    }
   },
   "dashboard": {
     "title": "داشبورد",
@@ -39,7 +56,29 @@
     "viewAnalytics": "مشاهده تحلیل‌ها",
     "chatWithTeam": "چت با تیم",
     "systemStatus": "وضعیت سیستم",
-    "allSystemsOperational": "همه سیستم‌ها فعال هستند"
+    "allSystemsOperational": "همه سیستم‌ها فعال هستند",
+    "widgets": {
+      "chatGlance": "چت",
+      "weather": "آب و هوا",
+      "todos": "کارها",
+      "stickyNotes": "یادداشت‌ها"
+    },
+    "openChat": "باز کردن چت",
+    "addTodo": "افزودن کار",
+    "addNote": "افزودن یادداشت",
+    "noTodos": "هنوز کاری ندارید",
+    "noNotes": "هنوز یادداشتی ندارید",
+    "noMessages": "پیام اخیری وجود ندارد",
+    "noNewMessages": "پیام جدیدی وجود ندارد",
+    "viewFullConversation": "مشاهده کل مکالمه",
+    "you": "شما",
+    "unreadMessages": "خوانده نشده",
+    "weather": {
+      "loading": "در حال بارگذاری آب و هوا...",
+      "error": "بارگذاری آب و هوا ناموفق بود",
+      "location": "مکان",
+      "feelsLike": "احساس می‌شود"
+    }
   },
   "users": {
     "title": "کاربران",

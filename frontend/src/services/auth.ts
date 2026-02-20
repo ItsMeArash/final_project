@@ -5,6 +5,17 @@ export interface LoginRequest {
   password: string
 }
 
+export interface RegisterRequest {
+  username: string
+  password: string
+  full_name?: string
+}
+
+export interface RegisterResponse {
+  token: string
+  user: User
+}
+
 export interface CaptchaResponse {
   id: string
   question: string
@@ -45,6 +56,11 @@ export interface VerifyCaptchaResponse {
 export const authService = {
   login: async (data: LoginRequest): Promise<LoginResponse> => {
     const response = await api.post('/auth/login', data)
+    return response.data
+  },
+
+  register: async (data: RegisterRequest): Promise<RegisterResponse> => {
+    const response = await api.post('/auth/register', data)
     return response.data
   },
 

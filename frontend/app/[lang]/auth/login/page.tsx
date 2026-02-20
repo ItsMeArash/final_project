@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { useRouter, useParams, usePathname } from 'next/navigation'
+import { PasswordInput } from '@/components/ui/PasswordInput'
 import { useMutation } from '@tanstack/react-query'
 import { useDictionary } from '@/contexts/DictionaryContext'
 import { authService } from '@/services/auth'
@@ -117,28 +119,30 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 dark:bg-gray-900 sm:px-6">
       <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-md dark:bg-gray-800">
-        <div className="relative">
-          <div className="absolute top-0 right-0 flex gap-1">
-            <button
-              type="button"
-              onClick={() => switchLocale('fa')}
-              className={`rounded px-2 py-1 text-sm ${
-                lang === 'fa' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500'
-              }`}
-            >
-              FA
-            </button>
-            <button
-              type="button"
-              onClick={() => switchLocale('en')}
-              className={`rounded px-2 py-1 text-sm ${
-                lang === 'en' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500'
-              }`}
-            >
-              EN
-            </button>
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-end">
+            <div className="flex gap-1">
+              <button
+                type="button"
+                onClick={() => switchLocale('fa')}
+                className={`rounded px-2 py-1 text-sm ${
+                  lang === 'fa' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500'
+                }`}
+              >
+                FA
+              </button>
+              <button
+                type="button"
+                onClick={() => switchLocale('en')}
+                className={`rounded px-2 py-1 text-sm ${
+                  lang === 'en' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-300 dark:hover:bg-gray-500'
+                }`}
+              >
+                EN
+              </button>
+            </div>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+          <h2 className="text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
             {t('auth.loginTitle')}
           </h2>
         </div>
@@ -164,14 +168,16 @@ export default function LoginPage() {
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t('auth.password')}
               </label>
-              <input
+              <PasswordInput
                 id="password"
                 name="password"
-                type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                className="mt-1"
+                inputClassName="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+                showPasswordLabel={t('auth.showPassword')}
+                hidePasswordLabel={t('auth.hidePassword')}
               />
             </div>
 
@@ -186,6 +192,16 @@ export default function LoginPage() {
             >
               {loginMutation.isPending ? t('auth.loggingIn') : t('auth.login')}
             </button>
+
+            <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+              {t('auth.dontHaveAccount')}{' '}
+              <Link
+                href={`/${lang}/auth/register`}
+                className="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400"
+              >
+                {t('auth.register')}
+              </Link>
+            </p>
           </form>
         )}
 

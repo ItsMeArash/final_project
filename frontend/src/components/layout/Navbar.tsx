@@ -1,10 +1,11 @@
 'use client'
 
+import { useState, useRef, useEffect } from 'react'
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter, useParams, usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { useDictionary } from '@/contexts/DictionaryContext'
-import { Menu, LogOut, Sun, Moon } from 'lucide-react'
+import { Menu, LogOut, Sun, Moon, UserCircle, ChevronDown } from 'lucide-react'
 
 interface NavbarProps {
   onToggleSidebar: () => void
@@ -24,6 +25,18 @@ export function Navbar({ onToggleSidebar, isSidebarExpanded }: NavbarProps) {
   const lang = params?.lang as string
   const { t } = useDictionary()
   const isDark = resolvedTheme === 'dark'
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const userMenuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false)
+      }
+    }
+    if (userMenuOpen) document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [userMenuOpen])
 
   const handleLogout = () => {
     clearAuth()
@@ -38,7 +51,7 @@ export function Navbar({ onToggleSidebar, isSidebarExpanded }: NavbarProps) {
 
   return (
     <nav className="border-b border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-6">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-4">
             <button
@@ -82,16 +95,35 @@ export function Navbar({ onToggleSidebar, isSidebarExpanded }: NavbarProps) {
                 EN
               </button>
             </div>
-            <span className="hidden text-sm text-gray-700 sm:inline dark:text-gray-300">
-              {user?.full_name} ({user?.role?.name})
-            </span>
-            <button
-              onClick={handleLogout}
-              className="inline-flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 sm:px-4 dark:text-red-400 dark:hover:bg-red-900/30"
-            >
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">{t('layout.logout')}</span>
-            </button>
+            <div className="relative hidden sm:block" ref={userMenuRef}>
+              <button
+                onClick={() => setUserMenuOpen((o) => !o)}
+                className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+                aria-expanded={userMenuOpen}
+                aria-haspopup="true"
+              >
+                <UserCircle className="h-8 w-8 shrink-0 text-gray-500 dark:text-gray-400" />
+                <span className="inline-flex flex-col items-start">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{user?.full_name}</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">{user?.role?.name}</span>
+                </span>
+                <ChevronDown className={`h-4 w-4 shrink-0 text-gray-500 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {userMenuOpen && (
+                <div className="absolute right-0 top-full z-50 mt-1 min-w-[160px] rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-600 dark:bg-gray-800">
+                  <button
+                    onClick={() => {
+                      handleLogout()
+                      setUserMenuOpen(false)
+                    }}
+                    className="flex w-full items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/30"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    {t('layout.logout')}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

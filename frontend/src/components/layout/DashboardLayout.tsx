@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Navbar } from './Navbar'
 import { Sidebar } from './Sidebar'
 import { ProtectedRoute } from './ProtectedRoute'
@@ -24,9 +24,18 @@ function DashboardContent({
 }) {
   const { isPending } = useNavigation() ?? {}
   const { t } = useDictionary()
+  const prevIsPending = useRef(isPending)
+
+  useEffect(() => {
+    if (prevIsPending.current && !isPending) {
+      const isMobile = window.matchMedia('(max-width: 1023px)').matches
+      if (isMobile) setSidebarExpanded(false)
+    }
+    prevIsPending.current = isPending
+  }, [isPending, setSidebarExpanded])
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-screen flex-col overflow-hidden bg-gray-50 dark:bg-gray-900">
       <Navbar
         onToggleSidebar={() => setSidebarExpanded((p) => !p)}
         isSidebarExpanded={sidebarExpanded}
@@ -38,12 +47,9 @@ function DashboardContent({
           aria-hidden
         />
       )}
-      <div className="flex min-h-[calc(100vh-4rem)]">
-        <Sidebar
-          isExpanded={sidebarExpanded}
-          onClose={() => setSidebarExpanded(false)}
-        />
-        <main className="relative flex-1 p-4 transition-all duration-300 ease-in-out sm:p-6 lg:p-8">
+      <div className="flex min-h-0 flex-1 overflow-hidden">
+        <Sidebar isExpanded={sidebarExpanded} />
+        <main className="relative min-h-0 flex-1 overflow-y-auto p-4 transition-all duration-300 ease-in-out sm:p-6 lg:p-8">
           {isPending && (
             <div
               className="absolute inset-0 z-10 flex items-center justify-center bg-gray-50/80 backdrop-blur-[1px] dark:bg-gray-900/80"
