@@ -35,8 +35,20 @@ export const useChatStore = create<ChatState>((set) => ({
   selectedUserId: null,
   setMessages: (messages) => set({ messages }),
   addMessage: (message) =>
-    set((state) => ({ messages: [...state.messages, message] })),
-  setOnlineUsers: (users) => set({ onlineUsers: users }),
+    set((state) => {
+      const exists = state.messages.some((m) => m.id === message.id)
+      if (exists) return state
+      return { messages: [...state.messages, message] }
+    }),
+  setOnlineUsers: (users) => {
+    const seen = new Set<string>()
+    const unique = users.filter((u) => {
+      if (seen.has(u.id)) return false
+      seen.add(u.id)
+      return true
+    })
+    set({ onlineUsers: unique })
+  },
   setSelectedUser: (userId) => set({ selectedUserId: userId }),
   clearChat: () => set({ messages: [], selectedUserId: null }),
 }))

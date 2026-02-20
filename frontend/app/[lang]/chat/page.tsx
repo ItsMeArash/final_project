@@ -33,7 +33,13 @@ export default function ChatPage() {
 
   useEffect(() => {
     if (chatHistory) {
-      setMessages(chatHistory)
+      const seen = new Set<string>()
+      const unique = chatHistory.filter((m) => {
+        if (seen.has(m.id)) return false
+        seen.add(m.id)
+        return true
+      })
+      setMessages(unique)
     }
   }, [chatHistory, setMessages])
 

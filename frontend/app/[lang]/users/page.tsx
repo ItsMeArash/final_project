@@ -54,19 +54,19 @@ export default function UsersPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {t('users.name')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {t('users.username')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {t('users.role')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {t('users.status')}
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
                   {t('users.actions')}
                 </th>
               </tr>
@@ -74,13 +74,13 @@ export default function UsersPage() {
             <tbody className="bg-white divide-y divide-gray-200">
               {users?.map((user) => (
                 <tr key={user.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-start">
                     {user.full_name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-start">
                     {user.username}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-start">
                     {user.role && hasPermission('ROLE_MANAGE') ? (
                       <LocaleLink
                         href={`/roles/${user.role.id}`}
@@ -92,7 +92,7 @@ export default function UsersPage() {
                       user.role?.name || t('common.na')
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4 whitespace-nowrap text-start">
                     <span
                       className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                         user.is_active
@@ -103,7 +103,7 @@ export default function UsersPage() {
                       {user.is_active ? t('common.active') : t('common.inactive')}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-start">
                     <div className="inline-flex flex-wrap items-center gap-2">
                       {hasPermission('USER_UPDATE') && (
                         <LocaleLink

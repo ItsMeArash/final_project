@@ -113,8 +113,13 @@ func (h *Hub) GetOnlineUsers() []OnlineUser {
 	h.mu.RLock()
 	defer h.mu.RUnlock()
 
+	seen := make(map[uuid.UUID]bool)
 	users := make([]OnlineUser, 0, len(h.clients))
 	for client := range h.clients {
+		if seen[client.UserID] {
+			continue
+		}
+		seen[client.UserID] = true
 		users = append(users, OnlineUser{
 			ID:       client.UserID,
 			Username: client.Username,

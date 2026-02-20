@@ -27,11 +27,11 @@ export function useWebSocket() {
 
           if (data.type === 'chat') {
             const message: ChatMessage = {
-              id: data.id || Date.now().toString(),
+              id: data.id || `ws-${Date.now()}`,
               sender_id: data.sender_id,
               receiver_id: data.receiver_id,
-              message: data.content || data.message,
-              created_at: data.timestamp || new Date().toISOString(),
+              message: data.message || data.content,
+              created_at: data.created_at || data.timestamp || new Date().toISOString(),
               sender: data.sender,
             }
             addMessage(message)

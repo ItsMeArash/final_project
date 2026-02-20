@@ -60,8 +60,18 @@ func (c *Client) ReadPump() {
 				log.Printf("Error saving message to database: %v", err)
 			}
 
-			// Update message with saved data for broadcast
-			messageBytes, _ = json.Marshal(message)
+			// Build broadcast payload with DB id for deduplication
+			broadcastPayload := map[string]interface{}{
+				"type":       "chat",
+				"id":         chatMessage.ID.String(),
+				"sender_id":  chatMessage.SenderID.String(),
+				"message":    chatMessage.Message,
+				"created_at": chatMessage.CreatedAt.Format("2006-01-02T15:04:05.000Z"),
+			}
+			if chatMessage.ReceiverID != nil {
+				broadcastPayload["receiver_id"] = chatMessage.ReceiverID.String()
+			}
+			messageBytes, _ = json.Marshal(broadcastPayload)
 		}
 
 		message.Raw = messageBytes
