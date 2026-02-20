@@ -2,43 +2,65 @@
 
 import { useAuthStore } from '@/stores/authStore'
 import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import { useTranslation } from 'react-i18next'
+import { LocaleLink } from '@/components/LocaleLink'
+import { useDictionary } from '@/contexts/DictionaryContext'
+import {
+  LayoutDashboard,
+  Users,
+  BarChart3,
+  MessageCircle,
+} from 'lucide-react'
 
-export function Sidebar() {
+interface SidebarProps {
+  isExpanded: boolean
+  onToggle?: () => void
+}
+
+const menuItems = [
+  { labelKey: 'layout.dashboard', href: '/dashboard', permission: null, Icon: LayoutDashboard },
+  { labelKey: 'layout.users', href: '/users', permission: 'USER_READ', Icon: Users },
+  { labelKey: 'layout.analytics', href: '/analytics', permission: 'ANALYTICS_VIEW', Icon: BarChart3 },
+  { labelKey: 'layout.chat', href: '/chat', permission: 'CHAT_SEND', Icon: MessageCircle },
+] as const
+
+export function Sidebar({ isExpanded }: SidebarProps) {
   const { hasPermission } = useAuthStore()
   const pathname = usePathname()
-  const { t } = useTranslation()
-
-  const menuItems = [
-    { labelKey: 'layout.dashboard', href: '/dashboard', permission: null },
-    { labelKey: 'layout.users', href: '/users', permission: 'USER_READ' },
-    { labelKey: 'layout.analytics', href: '/analytics', permission: 'ANALYTICS_VIEW' },
-    { labelKey: 'layout.chat', href: '/chat', permission: 'CHAT_SEND' },
-  ]
+  const { t } = useDictionary()
 
   const filteredMenuItems = menuItems.filter(
     (item) => !item.permission || hasPermission(item.permission)
   )
 
   return (
-    <aside className="w-64 bg-gray-50 border-r border-gray-200 min-h-screen">
-      <nav className="mt-8">
-        <div className="px-4 space-y-2">
+    <aside
+      className={`m-4 rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden transition-all duration-300 ease-in-out ${
+        isExpanded ? 'w-64' : 'w-[72px]'
+      }`}
+    >
+      <nav className="py-4">
+        <div className="space-y-1 px-3">
           {filteredMenuItems.map((item) => {
-            const isActive = pathname === item.href
+            const pathWithoutLocale = pathname?.replace(/^\/(en|fa)/, '') || '/'
+            const isActive =
+              pathWithoutLocale === item.href ||
+              pathWithoutLocale.startsWith(`${item.href}/`)
+            const Icon = item.Icon
             return (
-              <Link
+              <LocaleLink
                 key={item.href}
                 href={item.href}
-                className={`block px-4 py-2 rounded-md text-sm font-medium ${
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
+                    ? 'bg-primary-600 text-white shadow-sm'
+                    : 'text-gray-600 hover:bg-gray-100'
+                } ${!isExpanded ? 'justify-center' : ''}`}
               >
-                {t(item.labelKey)}
-              </Link>
+                <Icon className="h-5 w-5 shrink-0" />
+                {isExpanded && (
+                  <span className="truncate">{t(item.labelKey)}</span>
+                )}
+              </LocaleLink>
             )
           })}
         </div>

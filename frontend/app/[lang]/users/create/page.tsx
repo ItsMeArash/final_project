@@ -1,17 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useRouter, useParams } from 'next/navigation'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
-import { useTranslation } from 'react-i18next'
+import { useDictionary } from '@/contexts/DictionaryContext'
 import { usersService } from '@/services/users'
 import { rolesService } from '@/services/roles'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { PageSpinner } from '@/components/ui/PageSpinner'
 
-export default function EditUserPage({ params }: { params: { id: string } }) {
-  const { t } = useTranslation()
+export default function CreateUserPage() {
+  const { t } = useDictionary()
   const router = useRouter()
+  const params = useParams()
+  const lang = params?.lang as string
   const [formData, setFormData] = useState({
     full_name: '',
     username: '',
@@ -19,63 +20,28 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
     role_id: '',
     is_active: true,
   })
-  const [passwordChanged, setPasswordChanged] = useState(false)
-
-  const { data: user, isLoading } = useQuery({
-    queryKey: ['user', params.id],
-    queryFn: () => usersService.getUser(params.id),
-  })
 
   const { data: roles } = useQuery({
     queryKey: ['roles'],
     queryFn: rolesService.getRoles,
   })
 
-  useEffect(() => {
-    if (user) {
-      setFormData({
-        full_name: user.full_name,
-        username: user.username,
-        password: '',
-        role_id: user.role_id,
-        is_active: user.is_active,
-      })
-    }
-  }, [user])
-
-  const updateMutation = useMutation({
-    mutationFn: (data: any) => usersService.updateUser(params.id, data),
+  const createMutation = useMutation({
+    mutationFn: usersService.createUser,
     onSuccess: () => {
-      router.push('/users')
+      router.push(`/${lang}/users`)
     },
   })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const updateData: any = {
-      full_name: formData.full_name,
-      username: formData.username,
-      role_id: formData.role_id,
-      is_active: formData.is_active,
-    }
-    if (passwordChanged && formData.password) {
-      updateData.password = formData.password
-    }
-    updateMutation.mutate(updateData)
-  }
-
-  if (isLoading) {
-    return (
-      <DashboardLayout requiredPermission="USER_UPDATE">
-        <PageSpinner message={t('users.loadingUser')} fullScreen={false} />
-      </DashboardLayout>
-    )
+    createMutation.mutate(formData as Parameters<typeof usersService.createUser>[0])
   }
 
   return (
-    <DashboardLayout requiredPermission="USER_UPDATE">
+    <DashboardLayout requiredPermission="USER_CREATE">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">{t('users.editUser')}</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">{t('users.createUser')}</h1>
 
         <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6 max-w-2xl">
           <div className="space-y-4">
@@ -109,16 +75,14 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t('users.passwordLeaveBlank')}
+                {t('auth.password')}
               </label>
               <input
                 type="password"
+                required
                 minLength={8}
                 value={formData.password}
-                onChange={(e) => {
-                  setFormData({ ...formData, password: e.target.value })
-                  setPasswordChanged(true)
-                }}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
@@ -154,19 +118,17 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
               </label>
             </div>
 
-            {updateMutation.isError && (
-              <div className="text-red-600 text-sm">
-                {t('users.errorUpdating')}
-              </div>
+            {createMutation.isError && (
+              <div className="text-red-600 text-sm">{t('users.errorCreating')}</div>
             )}
 
             <div className="flex space-x-4">
               <button
                 type="submit"
-                disabled={updateMutation.isPending}
+                disabled={createMutation.isPending}
                 className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50"
               >
-                {updateMutation.isPending ? t('users.updating') : t('users.updateUser')}
+                {createMutation.isPending ? t('users.creating') : t('users.createUser')}
               </button>
               <button
                 type="button"

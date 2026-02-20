@@ -1,15 +1,16 @@
 'use client'
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
+import { useDictionary } from '@/contexts/DictionaryContext'
 import { usersService } from '@/services/users'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
 import { PageSpinner } from '@/components/ui/PageSpinner'
 import { useAuthStore } from '@/stores/authStore'
-import Link from 'next/link'
+import { LocaleLink } from '@/components/LocaleLink'
+import { UserPlus, Pencil, Trash2 } from 'lucide-react'
 
 export default function UsersPage() {
-  const { t } = useTranslation()
+  const { t } = useDictionary()
   const queryClient = useQueryClient()
   const { hasPermission } = useAuthStore()
 
@@ -39,16 +40,17 @@ export default function UsersPage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900">{t('users.title')}</h1>
           {hasPermission('USER_CREATE') && (
-            <Link
+            <LocaleLink
               href="/users/create"
-              className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-primary-600 px-4 py-2 text-white shadow-sm transition-colors hover:bg-primary-700"
             >
+              <UserPlus className="h-4 w-4" />
               {t('users.createUser')}
-            </Link>
+            </LocaleLink>
           )}
         </div>
 
-        <div className="bg-white shadow rounded-lg overflow-hidden">
+        <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -92,27 +94,31 @@ export default function UsersPage() {
                       {user.is_active ? t('common.active') : t('common.inactive')}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                    {hasPermission('USER_UPDATE') && (
-                      <Link
-                        href={`/users/${user.id}`}
-                        className="text-primary-600 hover:text-primary-900"
-                      >
-                        {t('users.edit')}
-                      </Link>
-                    )}
-                    {hasPermission('USER_DELETE') && (
-                      <button
-                        onClick={() => {
-                          if (confirm(t('users.deleteConfirm'))) {
-                            deleteMutation.mutate(user.id)
-                          }
-                        }}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        {t('users.delete')}
-                      </button>
-                    )}
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
+                    <div className="inline-flex flex-wrap items-center gap-2">
+                      {hasPermission('USER_UPDATE') && (
+                        <LocaleLink
+                          href={`/users/${user.id}`}
+                          className="inline-flex items-center gap-1.5 text-primary-600 transition-colors hover:text-primary-900"
+                        >
+                          <Pencil className="h-4 w-4" />
+                          {t('users.edit')}
+                        </LocaleLink>
+                      )}
+                      {hasPermission('USER_DELETE') && (
+                        <button
+                          onClick={() => {
+                            if (confirm(t('users.deleteConfirm'))) {
+                              deleteMutation.mutate(user.id)
+                            }
+                          }}
+                          className="inline-flex items-center gap-1.5 text-red-600 transition-colors hover:text-red-900"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          {t('users.delete')}
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -2,9 +2,9 @@
 
 import { PageSpinner } from '@/components/ui/PageSpinner'
 import { useAuthStore } from '@/stores/authStore'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useRouter, useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useDictionary } from '@/contexts/DictionaryContext'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
@@ -17,18 +17,33 @@ export function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, token, hasPermission } = useAuthStore()
   const router = useRouter()
-  const { t } = useTranslation()
+  const params = useParams()
+  const lang = params?.lang as string
+  const { t } = useDictionary()
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
     if (!token || !user) {
-      router.push('/auth/login')
+      router.push(`/${lang}/auth/login`)
       return
     }
-
     if (requiredPermission && !hasPermission(requiredPermission)) {
-      router.push('/dashboard')
+      router.push(`/${lang}/dashboard`)
     }
-  }, [token, user, requiredPermission, hasPermission, router])
+  }, [mounted, token, user, requiredPermission, hasPermission, router, lang])
+
+  if (!mounted) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-white">
+        <PageSpinner message={t('common.loading')} />
+      </div>
+    )
+  }
 
   if (!token || !user) {
     return (

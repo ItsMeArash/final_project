@@ -2,22 +2,24 @@
 
 import { PageSpinner } from '@/components/ui/PageSpinner'
 import { useAuthStore } from '@/stores/authStore'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useDictionary } from '@/contexts/DictionaryContext'
 
 export default function HomePage() {
   const router = useRouter()
+  const params = useParams()
+  const lang = params?.lang as string
   const { token } = useAuthStore()
-  const { t } = useTranslation()
+  const { t } = useDictionary()
 
   useEffect(() => {
     if (token) {
-      router.push('/dashboard')
+      router.push(`/${lang}/dashboard`)
     } else {
-      router.push('/auth/login')
+      router.push(`/${lang}/auth/login`)
     }
-  }, [token, router])
+  }, [token, router, lang])
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white">

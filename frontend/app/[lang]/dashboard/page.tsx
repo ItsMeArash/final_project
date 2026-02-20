@@ -1,10 +1,10 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useDictionary } from '@/contexts/DictionaryContext'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
 
 export default function DashboardPage() {
-  const { t } = useTranslation()
+  const { t } = useDictionary()
 
   return (
     <DashboardLayout>

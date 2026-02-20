@@ -1,17 +1,24 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams, usePathname } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
+import { useDictionary } from '@/contexts/DictionaryContext'
 import { authService } from '@/services/auth'
 import { useAuthStore } from '@/stores/authStore'
 
 type LoginStep = 'credentials' | 'captcha'
 
+function setNextLocaleCookie(locale: string) {
+  document.cookie = `NEXT_LOCALE=${locale};path=/;max-age=31536000`
+}
+
 export default function LoginPage() {
-  const { t, i18n } = useTranslation()
+  const { t } = useDictionary()
   const router = useRouter()
+  const params = useParams()
+  const pathname = usePathname()
+  const lang = params?.lang as string
   const [step, setStep] = useState<LoginStep>('credentials')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -34,26 +41,24 @@ export default function LoginPage() {
   const verifyCaptchaMutation = useMutation({
     mutationFn: authService.verifyCaptcha,
     onSuccess: async (data) => {
-      // Fetch user permissions from backend
       try {
         const token = data.token
         if (typeof window !== 'undefined') {
           localStorage.setItem('token', token)
         }
-        
-        // Fetch current user with permissions
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4010/api'}/me`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        })
-        
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4010/api'}/me`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+
         if (response.ok) {
           const meData = await response.json()
           const permissions = meData.permissions || []
           setAuth(data.user, data.token, permissions)
         } else {
-          // Fallback to role-based permissions if API fails
           const permissions =
             data.user.role?.name === 'admin'
               ? [
@@ -66,15 +71,13 @@ export default function LoginPage() {
                   'CHAT_SEND',
                 ]
               : data.user.role?.name === 'manager'
-              ? ['USER_CREATE', 'USER_READ', 'USER_UPDATE', 'ANALYTICS_VIEW', 'CHAT_SEND']
-              : ['USER_READ', 'ANALYTICS_VIEW', 'CHAT_SEND']
+                ? ['USER_CREATE', 'USER_READ', 'USER_UPDATE', 'ANALYTICS_VIEW', 'CHAT_SEND']
+                : ['USER_READ', 'ANALYTICS_VIEW', 'CHAT_SEND']
           setAuth(data.user, data.token, permissions)
         }
-        
-        router.push('/dashboard')
+        router.push(`/${lang}/dashboard`)
       } catch (error) {
         console.error('Error fetching user permissions:', error)
-        // Still proceed with login using fallback permissions
         const permissions =
           data.user.role?.name === 'admin'
             ? [
@@ -87,10 +90,10 @@ export default function LoginPage() {
                 'CHAT_SEND',
               ]
             : data.user.role?.name === 'manager'
-            ? ['USER_CREATE', 'USER_READ', 'USER_UPDATE', 'ANALYTICS_VIEW', 'CHAT_SEND']
-            : ['USER_READ', 'ANALYTICS_VIEW', 'CHAT_SEND']
+              ? ['USER_CREATE', 'USER_READ', 'USER_UPDATE', 'ANALYTICS_VIEW', 'CHAT_SEND']
+              : ['USER_READ', 'ANALYTICS_VIEW', 'CHAT_SEND']
         setAuth(data.user, data.token, permissions)
-        router.push('/dashboard')
+        router.push(`/${lang}/dashboard`)
       }
     },
   })
@@ -105,6 +108,12 @@ export default function LoginPage() {
     verifyCaptchaMutation.mutate({ username, captcha_id: captchaId, answer: captchaAnswer })
   }
 
+  const switchLocale = (newLocale: string) => {
+    setNextLocaleCookie(newLocale)
+    const pathWithoutLocale = pathname?.replace(/^\/(en|fa)/, '') || '/'
+    router.push(`/${newLocale}${pathWithoutLocale || ''}`)
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
@@ -112,18 +121,18 @@ export default function LoginPage() {
           <div className="absolute top-0 right-0 flex gap-1">
             <button
               type="button"
-              onClick={() => i18n.changeLanguage('fa')}
+              onClick={() => switchLocale('fa')}
               className={`px-2 py-1 text-sm rounded ${
-                i18n.language === 'fa' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                lang === 'fa' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
               FA
             </button>
             <button
               type="button"
-              onClick={() => i18n.changeLanguage('en')}
+              onClick={() => switchLocale('en')}
               className={`px-2 py-1 text-sm rounded ${
-                i18n.language === 'en' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                lang === 'en' ? 'bg-primary-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
               EN
@@ -167,9 +176,7 @@ export default function LoginPage() {
             </div>
 
             {loginMutation.isError && (
-              <div className="text-red-600 text-sm">
-                {t('auth.invalidCredentials')}
-              </div>
+              <div className="text-red-600 text-sm">{t('auth.invalidCredentials')}</div>
             )}
 
             <button
@@ -199,9 +206,7 @@ export default function LoginPage() {
             </div>
 
             {verifyCaptchaMutation.isError && (
-              <div className="text-red-600 text-sm">
-                {t('auth.invalidCaptcha')}
-              </div>
+              <div className="text-red-600 text-sm">{t('auth.invalidCaptcha')}</div>
             )}
 
             <button

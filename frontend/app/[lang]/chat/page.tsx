@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
+import { useDictionary } from '@/contexts/DictionaryContext'
 import { chatService } from '@/services/chat'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
 import { useChatStore } from '@/stores/chatStore'
@@ -11,9 +11,16 @@ import { useWebSocket } from '@/hooks/useWebSocket'
 import { format } from 'date-fns'
 
 export default function ChatPage() {
-  const { t } = useTranslation()
+  const { t } = useDictionary()
   const { user } = useAuthStore()
-  const { selectedUserId, setSelectedUser, onlineUsers, messages, setMessages, addMessage } = useChatStore()
+  const {
+    selectedUserId,
+    setSelectedUser,
+    onlineUsers,
+    messages,
+    setMessages,
+    addMessage,
+  } = useChatStore()
   const { sendMessage: wsSendMessage } = useWebSocket()
   const [messageInput, setMessageInput] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -51,7 +58,6 @@ export default function ChatPage() {
   return (
     <DashboardLayout requiredPermission="CHAT_SEND">
       <div className="flex h-[calc(100vh-200px)]">
-        {/* Online Users List */}
         <div className="w-64 bg-white shadow rounded-lg p-4 mr-4">
           <h2 className="text-lg font-semibold mb-4">{t('chat.onlineUsers')}</h2>
           <div className="space-y-2">
@@ -73,15 +79,12 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Chat Window */}
         <div className="flex-1 bg-white shadow rounded-lg flex flex-col">
           {selectedUserId ? (
             <>
               <div className="p-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold">
-                  {
-                    onlineUsers.find((u) => u.id === selectedUserId)?.username
-                  }
+                  {onlineUsers.find((u) => u.id === selectedUserId)?.username}
                 </h2>
               </div>
 

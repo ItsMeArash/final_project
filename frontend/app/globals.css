@@ -1,4 +1,5 @@
 @import url('/fonts/fontiran.css');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -23,10 +24,10 @@ body {
   background: rgb(var(--background-start-rgb));
 }
 
-/* Persian font (Yekan Bakh FaNum) when language is fa */
+/* Persian font (Yekan Bakh FaNum) when language is fa - override Inter */
 html[lang='fa'] body,
 html[lang^='fa-'] body {
-  font-family: 'Yekan Bakh FaNum', sans-serif;
+  font-family: 'Yekan Bakh FaNum', 'Vazirmatn', 'Tahoma', sans-serif !important;
 }
 
 @layer base {

@@ -1,0 +1,98 @@
+{
+  "common": {
+    "loading": "در حال بارگذاری...",
+    "accessDenied": "دسترسی غیرمجاز",
+    "cancel": "انصراف",
+    "na": "—",
+    "active": "فعال",
+    "inactive": "غیرفعال"
+  },
+  "layout": {
+    "adminDashboard": "پنل مدیریت",
+    "logout": "خروج",
+    "dashboard": "داشبورد",
+    "users": "کاربران",
+    "analytics": "تحلیل‌ها",
+    "chat": "چت"
+  },
+  "auth": {
+    "loginTitle": "ورود به پنل مدیریت",
+    "username": "نام کاربری",
+    "password": "رمز عبور",
+    "invalidCredentials": "اطلاعات ورود نامعتبر است. لطفاً دوباره تلاش کنید.",
+    "loggingIn": "در حال ورود...",
+    "login": "ورود",
+    "enterAnswer": "پاسخ را وارد کنید",
+    "invalidCaptcha": "کپچا نامعتبر است. لطفاً دوباره تلاش کنید.",
+    "verifying": "در حال تأیید...",
+    "verifyCaptcha": "تأیید کپچا"
+  },
+  "dashboard": {
+    "title": "داشبورد",
+    "welcomeBack": "خوش آمدید!",
+    "sidebarHint": "از منوی کناری برای رفتن به بخش‌های مختلف پنل مدیریت استفاده کنید.",
+    "quickActions": "دسترسی سریع",
+    "manageUsers": "مدیریت کاربران",
+    "viewAnalytics": "مشاهده تحلیل‌ها",
+    "chatWithTeam": "چت با تیم",
+    "systemStatus": "وضعیت سیستم",
+    "allSystemsOperational": "همه سیستم‌ها فعال هستند"
+  },
+  "users": {
+    "title": "کاربران",
+    "createUser": "ایجاد کاربر",
+    "editUser": "ویرایش کاربر",
+    "name": "نام",
+    "username": "نام کاربری",
+    "role": "نقش",
+    "status": "وضعیت",
+    "actions": "عملیات",
+    "edit": "ویرایش",
+    "delete": "حذف",
+    "deleteConfirm": "آیا مطمئن هستید که می‌خواهید این کاربر را غیرفعال کنید؟",
+    "loadingUsers": "در حال بارگذاری کاربران...",
+    "loadingUser": "در حال بارگذاری کاربر...",
+    "fullName": "نام کامل",
+    "selectRole": "انتخاب نقش",
+    "passwordLeaveBlank": "رمز عبور (برای حفظ رمز فعلی خالی بگذارید)",
+    "errorCreating": "خطا در ایجاد کاربر. لطفاً تمام فیلدها را بررسی کرده و دوباره تلاش کنید.",
+    "errorUpdating": "خطا در بروزرسانی کاربر. لطفاً تمام فیلدها را بررسی کرده و دوباره تلاش کنید.",
+    "creating": "در حال ایجاد...",
+    "updating": "در حال بروزرسانی...",
+    "updateUser": "بروزرسانی کاربر"
+  },
+  "analytics": {
+    "title": "تحلیل‌ها",
+    "startDate": "تاریخ شروع",
+    "endDate": "تاریخ پایان",
+    "category": "دسته‌بندی",
+    "filterByCategory": "فیلتر بر اساس دسته‌بندی",
+    "loadingAnalytics": "در حال بارگذاری تحلیل‌ها...",
+    "totalUsers": "کل کاربران",
+    "activeUsers": "کاربران فعال",
+    "revenue": "درآمد",
+    "growthRate": "نرخ رشد",
+    "avgSession": "میانگین جلسه",
+    "dailyActiveUsers": "کاربران فعال روزانه",
+    "users": "کاربران",
+    "monthlyRevenue": "درآمد ماهانه",
+    "categoryDistribution": "توزیع دسته‌بندی",
+    "share": "سهم",
+    "productPerformance": "عملکرد محصول",
+    "value": "مقدار"
+  },
+  "chat": {
+    "onlineUsers": "کاربران آنلاین",
+    "typeMessage": "پیام بنویسید...",
+    "send": "ارسال",
+    "selectUserToChat": "کاربری را برای شروع چت انتخاب کنید"
+  },
+  "loading": {
+    "default": "در حال بارگذاری...",
+    "dashboard": "در حال بارگذاری داشبورد...",
+    "users": "در حال بارگذاری کاربران...",
+    "user": "در حال بارگذاری کاربر...",
+    "analytics": "در حال بارگذاری تحلیل‌ها...",
+    "chat": "در حال بارگذاری چت..."
+  }
+}

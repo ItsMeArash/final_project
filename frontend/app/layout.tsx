@@ -1,25 +1,21 @@
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { headers } from 'next/headers'
 import './globals.css'
-import { Providers } from '@/components/providers/Providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'Admin Dashboard',
-  description: 'Modular Admin Dashboard with Multi-step Authentication',
-}
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const headersList = await headers()
+  const locale = headersList.get('x-next-locale') || 'fa'
+  const isRtl = locale === 'fa'
+
   return (
-    <html lang="fa" dir="rtl" suppressHydrationWarning>
-      <body className={inter.className}>
-        <Providers>{children}</Providers>
-      </body>
+    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
+      <body className={inter.className}>{children}</body>
     </html>
   )
 }

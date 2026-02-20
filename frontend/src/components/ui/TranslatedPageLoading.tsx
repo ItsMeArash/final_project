@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslation } from 'react-i18next'
+import { useDictionary } from '@/contexts/DictionaryContext'
 import PageLoading from './PageLoading'
 
 interface TranslatedPageLoadingProps {
@@ -10,6 +10,6 @@ interface TranslatedPageLoadingProps {
 export default function TranslatedPageLoading({
   messageKey = 'loading.default',
 }: TranslatedPageLoadingProps) {
-  const { t } = useTranslation()
+  const { t } = useDictionary()
   return <PageLoading message={t(messageKey)} />
 }

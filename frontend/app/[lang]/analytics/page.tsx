@@ -2,18 +2,18 @@
 
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
+import { useDictionary } from '@/contexts/DictionaryContext'
+import { useParams } from 'next/navigation'
 import { analyticsService } from '@/services/analytics'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
 import { PageSpinner } from '@/components/ui/PageSpinner'
 import { format, subDays } from 'date-fns'
 import dynamic from 'next/dynamic'
+import Highcharts from 'highcharts'
 
-// Dynamically import Highcharts to avoid SSR issues
 const HighchartsReact = dynamic(() => import('highcharts-react-official'), {
   ssr: false,
 })
-import Highcharts from 'highcharts'
 
 const PERSIAN_FONT = "'Yekan Bakh FaNum', sans-serif"
 
@@ -34,8 +34,10 @@ function getChartFontOptions(lang: string): Highcharts.Options {
 }
 
 export default function AnalyticsPage() {
-  const { t, i18n } = useTranslation()
-  const fontOptions = getChartFontOptions(i18n.language)
+  const params = useParams()
+  const lang = params?.lang as string
+  const { t } = useDictionary()
+  const fontOptions = getChartFontOptions(lang)
   const [startDate, setStartDate] = useState(
     format(subDays(new Date(), 30), 'yyyy-MM-dd')
   )
@@ -44,31 +46,50 @@ export default function AnalyticsPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['analytics', startDate, endDate, category],
-    queryFn: () => analyticsService.getAnalytics({ start_date: startDate, end_date: endDate, category }),
+    queryFn: () =>
+      analyticsService.getAnalytics({
+        start_date: startDate,
+        end_date: endDate,
+        category,
+      }),
   })
 
   const lineChartOptions: Highcharts.Options = {
     ...fontOptions,
     title: { ...fontOptions.title, text: t('analytics.dailyActiveUsers') },
     xAxis: { ...fontOptions.xAxis, categories: data?.line_chart.labels || [] },
-    yAxis: { ...fontOptions.yAxis, title: { ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title, text: t('analytics.users') } },
-    series: data?.line_chart.datasets.map((dataset) => ({
-      type: 'line',
-      name: dataset.label,
-      data: dataset.data,
-    })) || [],
+    yAxis: {
+      ...fontOptions.yAxis,
+      title: {
+        ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title,
+        text: t('analytics.users'),
+      },
+    },
+    series:
+      data?.line_chart.datasets.map((dataset) => ({
+        type: 'line',
+        name: dataset.label,
+        data: dataset.data,
+      })) || [],
   }
 
   const barChartOptions: Highcharts.Options = {
     ...fontOptions,
     title: { ...fontOptions.title, text: t('analytics.monthlyRevenue') },
     xAxis: { ...fontOptions.xAxis, categories: data?.bar_chart.labels || [] },
-    yAxis: { ...fontOptions.yAxis, title: { ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title, text: t('analytics.revenue') } },
-    series: data?.bar_chart.datasets.map((dataset) => ({
-      type: 'column',
-      name: dataset.label,
-      data: dataset.data,
-    })) || [],
+    yAxis: {
+      ...fontOptions.yAxis,
+      title: {
+        ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title,
+        text: t('analytics.revenue'),
+      },
+    },
+    series:
+      data?.bar_chart.datasets.map((dataset) => ({
+        type: 'column',
+        name: dataset.label,
+        data: dataset.data,
+      })) || [],
   }
 
   const pieChartOptions: Highcharts.Options = {
@@ -79,10 +100,11 @@ export default function AnalyticsPage() {
       {
         type: 'pie',
         name: t('analytics.share'),
-        data: data?.pie_chart.labels.map((label, index) => [
-          label,
-          data.pie_chart.datasets[index],
-        ]) || [],
+        data:
+          data?.pie_chart.labels.map((label, index) => [
+            label,
+            data.pie_chart.datasets[index],
+          ]) || [],
       },
     ],
   }
@@ -91,12 +113,19 @@ export default function AnalyticsPage() {
     ...fontOptions,
     title: { ...fontOptions.title, text: t('analytics.productPerformance') },
     xAxis: { ...fontOptions.xAxis, categories: data?.area_chart.labels || [] },
-    yAxis: { ...fontOptions.yAxis, title: { ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title, text: t('analytics.value') } },
-    series: data?.area_chart.datasets.map((dataset) => ({
-      type: 'area',
-      name: dataset.label,
-      data: dataset.data,
-    })) || [],
+    yAxis: {
+      ...fontOptions.yAxis,
+      title: {
+        ...(fontOptions.yAxis as Highcharts.YAxisOptions)?.title,
+        text: t('analytics.value'),
+      },
+    },
+    series:
+      data?.area_chart.datasets.map((dataset) => ({
+        type: 'area',
+        name: dataset.label,
+        data: dataset.data,
+      })) || [],
   }
 
   return (
@@ -147,7 +176,6 @@ export default function AnalyticsPage() {
           <PageSpinner message={t('analytics.loadingAnalytics')} fullScreen={false} />
         ) : (
           <>
-            {/* KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
               <div className="bg-white shadow rounded-lg p-6">
                 <h3 className="text-sm font-medium text-gray-500">{t('analytics.totalUsers')}</h3>
@@ -181,7 +209,6 @@ export default function AnalyticsPage() {
               </div>
             </div>
 
-            {/* Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="bg-white shadow rounded-lg p-6">
                 <HighchartsReact highcharts={Highcharts} options={lineChartOptions} />
