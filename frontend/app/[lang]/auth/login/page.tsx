@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter, useParams, usePathname } from 'next/navigation'
 import { PasswordInput } from '@/components/ui/PasswordInput'
 import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { useDictionary } from '@/contexts/DictionaryContext'
 import { authService } from '@/services/auth'
 import { useAuthStore } from '@/stores/authStore'
@@ -40,9 +41,17 @@ export default function LoginPage() {
     },
   })
 
+  const getDefaultPermissions = (roleName?: string) => {
+    if (roleName === 'admin')
+      return ['USER_CREATE', 'USER_READ', 'USER_UPDATE', 'USER_DELETE', 'ROLE_MANAGE', 'ANALYTICS_VIEW', 'CHAT_SEND']
+    if (roleName === 'manager') return ['USER_CREATE', 'USER_READ', 'USER_UPDATE', 'ANALYTICS_VIEW', 'CHAT_SEND']
+    return ['USER_READ', 'ANALYTICS_VIEW', 'CHAT_SEND']
+  }
+
   const verifyCaptchaMutation = useMutation({
     mutationFn: authService.verifyCaptcha,
     onSuccess: async (data) => {
+      let permissions: string[] = []
       try {
         const token = data.token
         if (typeof window !== 'undefined') {
@@ -51,52 +60,20 @@ export default function LoginPage() {
 
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4010/api'}/me`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         )
 
-        if (response.ok) {
-          const meData = await response.json()
-          const permissions = meData.permissions || []
-          setAuth(data.user, data.token, permissions)
-        } else {
-          const permissions =
-            data.user.role?.name === 'admin'
-              ? [
-                  'USER_CREATE',
-                  'USER_READ',
-                  'USER_UPDATE',
-                  'USER_DELETE',
-                  'ROLE_MANAGE',
-                  'ANALYTICS_VIEW',
-                  'CHAT_SEND',
-                ]
-              : data.user.role?.name === 'manager'
-                ? ['USER_CREATE', 'USER_READ', 'USER_UPDATE', 'ANALYTICS_VIEW', 'CHAT_SEND']
-                : ['USER_READ', 'ANALYTICS_VIEW', 'CHAT_SEND']
-          setAuth(data.user, data.token, permissions)
-        }
-        router.push(`/${lang}/dashboard`)
+        permissions = response.ok
+          ? (await response.json()).permissions || []
+          : getDefaultPermissions(data.user.role?.name)
       } catch (error) {
         console.error('Error fetching user permissions:', error)
-        const permissions =
-          data.user.role?.name === 'admin'
-            ? [
-                'USER_CREATE',
-                'USER_READ',
-                'USER_UPDATE',
-                'USER_DELETE',
-                'ROLE_MANAGE',
-                'ANALYTICS_VIEW',
-                'CHAT_SEND',
-              ]
-            : data.user.role?.name === 'manager'
-              ? ['USER_CREATE', 'USER_READ', 'USER_UPDATE', 'ANALYTICS_VIEW', 'CHAT_SEND']
-              : ['USER_READ', 'ANALYTICS_VIEW', 'CHAT_SEND']
-        setAuth(data.user, data.token, permissions)
-        router.push(`/${lang}/dashboard`)
+        permissions = getDefaultPermissions(data.user.role?.name)
       }
+
+      setAuth(data.user, data.token, permissions)
+      toast.success(t('auth.loginSuccess'), { duration: Infinity })
+      router.push(`/${lang}/dashboard`)
     },
   })
 

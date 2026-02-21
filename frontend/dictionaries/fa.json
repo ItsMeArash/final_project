@@ -29,6 +29,7 @@
     "invalidCaptcha": "کپچا نامعتبر است. لطفاً دوباره تلاش کنید.",
     "verifying": "در حال تأیید...",
     "verifyCaptcha": "تأیید کپچا",
+    "loginSuccess": "در حال انتقال به داشبورد...",
     "registerTitle": "ایجاد حساب کاربری",
     "register": "ثبت نام",
     "registering": "در حال ایجاد حساب...",

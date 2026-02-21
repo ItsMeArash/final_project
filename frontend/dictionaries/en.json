@@ -29,6 +29,7 @@
     "invalidCaptcha": "Invalid captcha. Please try again.",
     "verifying": "Verifying...",
     "verifyCaptcha": "Verify Captcha",
+    "loginSuccess": "Redirecting to dashboard...",
     "registerTitle": "Create Account",
     "register": "Sign Up",
     "registering": "Creating account...",
