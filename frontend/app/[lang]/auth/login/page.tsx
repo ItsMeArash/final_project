@@ -72,7 +72,7 @@ export default function LoginPage() {
       }
 
       setAuth(data.user, data.token, permissions)
-      toast.success(t('auth.loginSuccess'), { duration: Infinity })
+      toast.success(t('auth.loginSuccess'))
       router.push(`/${lang}/dashboard`)
     },
   })
